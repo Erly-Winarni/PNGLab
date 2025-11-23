@@ -50,6 +50,23 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        session()->regenerate();
+    }
+
+    public function redirectTo(): string
+    {
+        $user = auth()->user();
+
+        if ($user->role === 'admin') {
+            return route('admin.dashboard');
+        }
+
+        if ($user->role === 'teacher') {
+            return route('teacher.dashboard');
+        }
+
+        return route('student.dashboard');
     }
 
     /**

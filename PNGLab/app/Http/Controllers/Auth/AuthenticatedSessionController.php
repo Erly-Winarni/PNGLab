@@ -28,9 +28,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
+        
+        $user = auth()->user();
 
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->role === 'teacher') {
+            return redirect()->route('teacher.dashboard');
+        }
+
+        return redirect()->route('student.dashboard');
+    }
     /**
      * Destroy an authenticated session.
      */
@@ -44,4 +54,18 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->role === 'teacher') {
+            return redirect()->route('teacher.dashboard');
+        }
+
+        return redirect()->route('student.dashboard');
+    }
+
 }
