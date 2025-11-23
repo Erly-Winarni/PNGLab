@@ -21,4 +21,15 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    public static function redirectToByRole($user)
+    {
+        return match ($user->role) {
+            'admin'   => '/dashboard/admin',
+            'teacher' => '/dashboard/teacher',
+            'student' => '/dashboard/student',
+            default   => '/',
+        };
+    }
+
 }
