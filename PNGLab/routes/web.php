@@ -2,39 +2,88 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CourseController;
+use App\Http\Controllers\PublicCourseController; 
+use App\Http\Controllers\Teacher\CourseController as TeacherCourseController; 
+use App\Http\Controllers\Admin\CourseController as AdminCourseController; 
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\TeacherDashboardController;
+use App\Models\Course;
+use App\Models\Category;
 
-Route::get('/', function () { return view('welcome'); });
+/*
+|--------------------------------------------------------------------------
+| Public Homepage
+|--------------------------------------------------------------------------
+*/
+Route::get('/', function () {
+    return view('welcome', [
+        'popularCourses' => Course::latest()->take(6)->get(),
+        'categories' => Category::all(),
+    ]);
+})->name('home');
 
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
+/*
+|--------------------------------------------------------------------------
+| Profile
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Admin
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'role:admin'])
     ->prefix('dashboard/admin')
+    ->name('admin.')
     ->group(function () {
         Route::get('/', function () {
             return view('admin.dashboard');
-        })->name('admin.dashboard');
-    });
+        })->name('dashboard');
 
+        Route::resource('courses', AdminCourseController::class); 
+    });
+/*
+|--------------------------------------------------------------------------
+| Teacher
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'role:teacher'])
     ->prefix('dashboard/teacher')
+    ->name('teacher.')
     ->group(function () {
-        Route::get('/', function () {
-            return view('teacher.dashboard');
-        })->name('teacher.dashboard');
+
+        Route::get('/', [TeacherDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // 🔥 Ganti dengan alias TeacherCourseController
+        Route::resource('courses', TeacherCourseController::class);
+
+        // TEACHER CONTENT CRUD
+        Route::resource('contents', ContentController::class);
     });
 
+/*
+|--------------------------------------------------------------------------
+| Student
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'role:student'])
     ->prefix('dashboard/student')
     ->group(function () {
@@ -43,35 +92,20 @@ Route::middleware(['auth', 'role:student'])
         })->name('student.dashboard');
     });
 
-Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest')
-    ->name('login');
-
-Route::middleware(['auth'])
-    ->name('courses.')
-    ->prefix('courses')
-    ->group(function () {
-
-        Route::get('/', [CourseController::class, 'index'])->name('index');
-        Route::get('/{slug}', [CourseController::class, 'show'])->name('show');
-
-    });
-
-Route::middleware(['auth', 'role:teacher'])
-    ->prefix('contents')
-    ->name('contents.')
-    ->group(function () {
-
-        Route::get('/', [ContentController::class, 'index'])->name('index');
-        Route::get('/create', [ContentController::class, 'create'])->name('create');
-        Route::post('/', [ContentController::class, 'store'])->name('store');
-
-        Route::get('/{id}/edit', [ContentController::class, 'edit'])->name('edit');
-        Route::patch('/{id}', [ContentController::class, 'update'])->name('update');
-
-        Route::delete('/{id}', [ContentController::class, 'destroy'])->name('destroy');
-    });
-
+/*
+|--------------------------------------------------------------------------
+| Categories (Admin/general)
+|--------------------------------------------------------------------------
+*/
 Route::resource('categories', CategoryController::class);
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC COURSE DETAIL (pakai slug)
+|--------------------------------------------------------------------------
+*/
+// 🔥 Gunakan PublicCourseController yang baru
+Route::get('/courses/{slug}', [PublicCourseController::class, 'show']) 
+    ->name('courses.show');
 
 require __DIR__.'/auth.php';

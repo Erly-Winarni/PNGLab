@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable {
     use Notifiable;
-    
+
     protected $fillable = [
         'name','email','password','role','is_active','avatar'
     ];
@@ -29,6 +29,11 @@ class User extends Authenticatable {
 
     public function progress() {
         return $this->hasMany(ContentProgress::class);
+    }
+
+    public function courses() {
+        return $this->belongsToMany(\App\Models\Course::class, 'course_user')
+                    ->withTimestamps();
     }
 
     // role helpers

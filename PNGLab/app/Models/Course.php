@@ -12,16 +12,20 @@ class Course extends Model {
         return $this->belongsTo(User::class,'teacher_id');
     }
 
-    public function category() {
+    public function students()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'course_user')
+                    ->withTimestamps();
+    }
+
+    public function contents()
+    {
+        return $this->hasMany(\App\Models\Content::class);
+    }
+
+    public function category()
+    {
         return $this->belongsTo(Category::class);
-    }
-
-    public function contents() {
-        return $this->hasMany(Content::class)->orderBy('order');
-    }
-
-    public function students() {
-        return $this->belongsToMany(User::class)->withTimestamps();
     }
 
     public function progressFor(User $user) {

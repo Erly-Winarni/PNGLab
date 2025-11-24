@@ -8,7 +8,7 @@
                 <h3 class="font-semibold text-lg">Manage Categories</h3>
             </a>
 
-            <a href="{{ route('courses.index') }}" class="p-6 bg-white shadow rounded-lg">
+            <a href="{{ route('admin.courses.index') }}" class="p-6 bg-white shadow rounded-lg">
                 <h3 class="font-semibold text-lg">Manage Courses</h3>
             </a>
 
