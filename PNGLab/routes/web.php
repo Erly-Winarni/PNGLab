@@ -6,9 +6,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\CategoryController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', function () { return view('welcome'); });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
