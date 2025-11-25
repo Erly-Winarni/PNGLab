@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StudentDashboardController;
-use App\Http\Controllers\TeacherDashboardController;
+use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Models\Course;
 use App\Models\Category;
 
@@ -57,7 +57,13 @@ Route::middleware(['auth', 'role:admin'])
             return view('admin.dashboard');
         })->name('dashboard');
 
+        // Courses CRUD
         Route::resource('courses', AdminCourseController::class); 
+
+        // 🔥 Users CRUD
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+
+        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     });
 /*
 |--------------------------------------------------------------------------

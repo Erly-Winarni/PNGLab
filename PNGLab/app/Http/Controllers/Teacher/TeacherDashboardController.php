@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Teacher; 
 
 use App\Models\Course;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class TeacherDashboardController extends Controller
