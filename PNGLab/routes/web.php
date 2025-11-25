@@ -57,13 +57,13 @@ Route::middleware(['auth', 'role:admin'])
             return view('admin.dashboard');
         })->name('dashboard');
 
-        // Courses CRUD
         Route::resource('courses', AdminCourseController::class); 
 
-        // 🔥 Users CRUD
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 
         Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+
+        Route::resource('contents', \App\Http\Controllers\Admin\ContentController::class);
     });
 /*
 |--------------------------------------------------------------------------
@@ -78,11 +78,9 @@ Route::middleware(['auth', 'role:teacher'])
         Route::get('/', [TeacherDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // 🔥 Ganti dengan alias TeacherCourseController
         Route::resource('courses', TeacherCourseController::class);
 
-        // TEACHER CONTENT CRUD
-        Route::resource('contents', ContentController::class);
+        Route::resource('contents', \App\Http\Controllers\Teacher\ContentController::class);
     });
 
 /*
@@ -92,12 +90,12 @@ Route::middleware(['auth', 'role:teacher'])
 */
 Route::middleware(['auth', 'role:student'])
     ->prefix('dashboard/student')
+    ->name('student.dashboard')
     ->group(function () {
-        Route::get('/', function () {
-            return view('student.dashboard');
-        })->name('student.dashboard');
+        Route::get('/', [StudentDashboardController::class, 'index'])->name('index');
+        Route::get('/course/{course:slug}', [StudentDashboardController::class, 'showCourse'])->name('course.show');
+        Route::post('/content/{content}/complete', [StudentDashboardController::class, 'markContentComplete'])->name('content.complete');
     });
-
 /*
 |--------------------------------------------------------------------------
 | Categories (Admin/general)

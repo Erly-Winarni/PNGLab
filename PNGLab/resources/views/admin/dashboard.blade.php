@@ -15,6 +15,10 @@
             <a href="{{ route('admin.users.index') }}" class="p-6 bg-white shadow rounded-lg">
                 <h3 class="font-semibold text-lg">Manage Users</h3>
             </a>
+
+            <a href="{{ route('admin.contents.index') }}" class="p-6 bg-white shadow rounded-lg">
+                <h3 class="font-semibold text-lg">Manage Content</h3>
+            </a>
         </div>
     </div>
 </x-app-layout>
