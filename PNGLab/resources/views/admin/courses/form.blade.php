@@ -85,10 +85,8 @@
     </div>
 
     {{-- Active Checkbox --}}
-    <div class="flex items-center space-x-2">
-        <input type="checkbox" name="is_active" id="is_active"
-            {{ old('is_active', $course->is_active ?? true) ? 'checked' : '' }}>
-        <label for="is_active" class="font-medium">Active Course</label>
-    </div>
+    <input type="checkbox" name="is_active" id="is_active"
+       {{ old('is_active', $course->is_active ?? true) ? 'checked' : '' }}>
+    <label for="is_active">Active Course</label>
 
 </div>
