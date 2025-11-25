@@ -2,59 +2,109 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Course;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function index()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
-    }
+        $user = auth()->user();
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+        $data = [
+            'user' => $user,
+        ];
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Student
+        if ($user->role === 'student') {
+            $data['courses'] = $user->courses()
+                ->with(['contents', 'teacher'])
+                ->get();
+
+            foreach ($data['courses'] as $course) {
+                $completed = $course->contents()
+                    ->whereHas('completedBy', fn($q) => $q->where('user_id', $user->id))
+                    ->count();
+
+                $course->progress = $course->contents->count() > 0
+                    ? round(($completed / $course->contents->count()) * 100)
+                    : 0;
+            }
         }
 
-        $request->user()->save();
+        // Teacher
+        if ($user->role === 'teacher') {
+            $data['courses'] = Course::where('teacher_id', $user->id)
+                ->withCount('students')
+                ->with('category')
+                ->get();
+        }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Admin
+        if ($user->role === 'admin') {
+            $data['totalUsers'] = \App\Models\User::count();
+            $data['totalStudents'] = \App\Models\User::where('role', 'student')->count();
+            $data['totalTeachers'] = \App\Models\User::where('role', 'teacher')->count();
+            $data['totalCourses'] = \App\Models\Course::count();
+        }
+
+        return view('profile.index', $data);
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    // ==========================
+    //     EDIT PROFILE
+    // ==========================
+    public function edit()
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        return view('profile.edit', ['user' => auth()->user()]);
+    }
+
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $user = $request->user();
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
+        }
 
-        Auth::logout();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
 
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return redirect()->route('profile.index')->with('success', 'Profile berhasil diperbarui!');
     }
+
+    public function editPassword()
+    {
+        $user = auth()->user();
+        return view('profile.password', compact('user'));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = auth()->user();
+
+        if (!\Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama salah']);
+        }
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect()->route('profile.index')->with('success', 'Password berhasil diperbarui!');
+    }
+
 }

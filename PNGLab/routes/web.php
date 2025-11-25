@@ -29,19 +29,42 @@ Route::get('/', function () {
 | Dashboard
 |--------------------------------------------------------------------------
 */
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    $user = auth()->user();
+    if ($user->role === 'admin') return redirect()->route('admin.dashboard');
+    if ($user->role === 'teacher') return redirect()->route('teacher.dashboard');
+    if ($user->role === 'student') return redirect()->route('student.dashboard');
+    return redirect('/');
+})->middleware(['auth'])->name('dashboard');
+
 
 /*
 |--------------------------------------------------------------------------
 | Profile
 |--------------------------------------------------------------------------
 */
+
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Profile Index
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile.index');
+
+    // Profile Edit
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile/edit', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::get('/profile/password/edit', [ProfileController::class, 'editPassword'])
+        ->name('profile.password.edit');
+
+    Route::patch('/profile/password/update', [ProfileController::class, 'updatePassword'])
+        ->name('profile.password.update');
 });
 
 /*
@@ -90,12 +113,21 @@ Route::middleware(['auth', 'role:teacher'])
 */
 Route::middleware(['auth', 'role:student'])
     ->prefix('dashboard/student')
-    ->name('student.dashboard')
+    ->name('student.')
     ->group(function () {
-        Route::get('/', [StudentDashboardController::class, 'index'])->name('index');
-        Route::get('/course/{course:slug}', [StudentDashboardController::class, 'showCourse'])->name('course.show');
-        Route::post('/content/{content}/complete', [StudentDashboardController::class, 'markContentComplete'])->name('content.complete');
+        Route::get('/', [\App\Http\Controllers\Student\StudentDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/courses/{course:slug}', [\App\Http\Controllers\Student\StudentDashboardController::class, 'showCourse'])
+            ->name('courses.show');
+
+        Route::post('/courses/{course}/follow', [\App\Http\Controllers\Student\StudentDashboardController::class, 'followCourse'])
+            ->name('courses.follow');
+
+        Route::post('/contents/{content}/complete', [\App\Http\Controllers\Student\StudentDashboardController::class, 'completeContent'])
+            ->name('contents.complete');
     });
+
 /*
 |--------------------------------------------------------------------------
 | Categories (Admin/general)

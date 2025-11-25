@@ -17,7 +17,7 @@ class User extends Authenticatable {
         'email_verified_at' => 'datetime',
         'is_active' => 'boolean',
     ];
-
+    
     // relations
     public function coursesTeaching() {
         return $this->hasMany(Course::class, 'teacher_id');
@@ -27,7 +27,8 @@ class User extends Authenticatable {
         return $this->belongsToMany(Course::class)->withTimestamps()->using(\App\Models\CourseUser::class);
     }
 
-    public function progress() {
+    public function contentProgress()
+    {
         return $this->hasMany(ContentProgress::class);
     }
 

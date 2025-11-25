@@ -1,47 +1,50 @@
 <?php
+namespace App\Http\Controllers\Student;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\ContentProgress;
+use App\Models\Content;
 use Illuminate\Http\Request;
 
 class StudentDashboardController extends Controller
 {
-    public function studentDashboard()
+    public function index()
+    {
+        $courses = Course::where('is_active', true)->get(); // Hanya course aktif
+        return view('student.dashboard', compact('courses'));
+    }
+
+    public function showCourse(Course $course)
+    {
+        // Materi urut berdasarkan order
+        $contents = $course->contents()->orderBy('order')->get();
+
+        // Ambil progress user saat ini
+        $progress = auth()->user()->contentProgress()
+                        ->whereIn('content_id', $contents->pluck('id'))
+                        ->pluck('is_done', 'content_id')
+                        ->toArray();
+
+        return view('student.course_show', compact('course', 'contents', 'progress'));
+    }
+
+    public function completeContent(Content $content)
     {
         $user = auth()->user();
 
-        // Ambil semua course yang diikuti student
-        $courses = $user->courses()
-            ->withCount('contents')
-            ->with('category')
-            ->get();
+        $user->contentProgress()->updateOrCreate(
+            ['content_id' => $content->id],
+            ['is_done' => true, 'done_at' => now()]
+        );
 
-        // Hitung progress masing-masing course
-        foreach ($courses as $course) {
-            $completed = ContentProgress::where('user_id', $user->id)
-                ->whereIn('content_id', $course->contents->pluck('id'))
-                ->count();
-
-            $total = $course->contents_count;
-
-            $course->progress = $total > 0 ? round(($completed / $total) * 100) : 0;
-        }
-
-        // Ambil kategori favorit user
-        $favoriteCategoryId = $courses
-            ->groupBy('category_id')
-            ->sortByDesc(fn ($group) => $group->count())
-            ->keys()
-            ->first();
-
-        // Rekomendasi course berdasarkan kategori favorit
-        $recommendations = Course::where('category_id', $favoriteCategoryId)
-            ->whereNotIn('id', $courses->pluck('id'))
-            ->limit(4)
-            ->get();
-
-        return view('student.dashboard', compact('courses', 'recommendations'));
+        return redirect()->back()->with('success', 'Materi ditandai selesai!');
     }
+
+
+    public function followCourse(Course $course)
+    {
+        auth()->user()->courses()->syncWithoutDetaching([$course->id]);
+        return redirect()->back()->with('success', 'Course diikuti!');
+    }
+
 }
