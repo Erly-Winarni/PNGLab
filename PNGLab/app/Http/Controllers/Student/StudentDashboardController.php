@@ -8,43 +8,35 @@ use Illuminate\Http\Request;
 
 class StudentDashboardController extends Controller
 {
-    public function index()
-    {
-        $courses = Course::where('is_active', true)->get(); // Hanya course aktif
-        return view('student.dashboard', compact('courses'));
-    }
-
-    public function showCourse(Course $course)
-    {
-        // Materi urut berdasarkan order
-        $contents = $course->contents()->orderBy('order')->get();
-
-        // Ambil progress user saat ini
-        $progress = auth()->user()->contentProgress()
-                        ->whereIn('content_id', $contents->pluck('id'))
-                        ->pluck('is_done', 'content_id')
-                        ->toArray();
-
-        return view('student.course_show', compact('course', 'contents', 'progress'));
-    }
-
-    public function completeContent(Content $content)
+    public function index(Request $request)
     {
         $user = auth()->user();
 
-        $user->contentProgress()->updateOrCreate(
-            ['content_id' => $content->id],
-            ['is_done' => true, 'done_at' => now()]
-        );
+        // Query dasar
+        $coursesQuery = Course::with(['teacher', 'category']);
 
-        return redirect()->back()->with('success', 'Materi ditandai selesai!');
+        // SEARCH
+        if ($request->filled('search')) {
+            $coursesQuery->where('title', 'like', "%{$request->search}%");
+        }
+
+        // FILTER KATEGORI
+        if ($request->filled('category')) {
+            $coursesQuery->where('category_id', $request->category);
+        }
+
+        // Ambil hasil
+        $courses = $coursesQuery->get();
+
+        // Popular course
+        $popularCourses = Course::withCount('students')
+            ->orderByDesc('students_count')
+            ->take(5)
+            ->get();
+
+        // Data kategori
+        $categories = \App\Models\Category::all();
+
+        return view('student.dashboard', compact('user', 'courses', 'popularCourses', 'categories'));
     }
-
-
-    public function followCourse(Course $course)
-    {
-        auth()->user()->courses()->syncWithoutDetaching([$course->id]);
-        return redirect()->back()->with('success', 'Course diikuti!');
-    }
-
 }

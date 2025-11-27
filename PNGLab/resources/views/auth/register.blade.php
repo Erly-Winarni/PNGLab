@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center bg-black p-4 pt-16 relative overflow-hidden">
+    <div class="min-h-screen flex items-center justify-center bg-[#20232a] p-4 pt-16 relative overflow-hidden">
 
         {{-- Background surat depan --}}
         <img src="{{ asset('images/surat-depan.png') }}"

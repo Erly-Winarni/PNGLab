@@ -5,7 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicCourseController; 
 use App\Http\Controllers\Teacher\CourseController as TeacherCourseController; 
 use App\Http\Controllers\Admin\CourseController as AdminCourseController; 
+use App\Http\Controllers\Student\CourseController as StudentCourseController; 
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\Student\ContentController as StudentContentController;
+use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
@@ -118,14 +121,23 @@ Route::middleware(['auth', 'role:student'])
         Route::get('/', [\App\Http\Controllers\Student\StudentDashboardController::class, 'index'])
             ->name('dashboard');
 
-        Route::get('/courses/{course:slug}', [\App\Http\Controllers\Student\StudentDashboardController::class, 'showCourse'])
+        Route::get('/catalog', [Student\CourseController::class, 'catalog'])
+            ->name('courses.catalog');
+
+        Route::get('/courses/{course:slug}', [\App\Http\Controllers\Student\CourseController::class, 'show'])
             ->name('courses.show');
 
-        Route::post('/courses/{course}/follow', [\App\Http\Controllers\Student\StudentDashboardController::class, 'followCourse'])
+        Route::post('/courses/{course}/follow', [\App\Http\Controllers\Student\CourseController::class, 'follow'])
             ->name('courses.follow');
 
-        Route::post('/contents/{content}/complete', [\App\Http\Controllers\Student\StudentDashboardController::class, 'completeContent'])
+        Route::get('/courses/{course:slug}/contents/{content}', 
+            [StudentContentController::class, 'show'])
+            ->name('contents.show');
+
+        Route::post('/courses/{course:slug}/contents/{content}/complete', 
+            [StudentContentController::class, 'complete'])
             ->name('contents.complete');
+
     });
 
 /*
@@ -142,6 +154,6 @@ Route::resource('categories', CategoryController::class);
 */
 // 🔥 Gunakan PublicCourseController yang baru
 Route::get('/courses/{slug}', [PublicCourseController::class, 'show']) 
-    ->name('courses.show');
+    ->name('public.courses.show');
 
 require __DIR__.'/auth.php';

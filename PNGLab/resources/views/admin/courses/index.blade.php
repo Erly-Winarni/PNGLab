@@ -38,7 +38,7 @@
                     <tr class="border-t hover:bg-gray-50 transition duration-150">
                         <td class="px-6 py-4">
                             {{-- Link VIEW menggunakan route publik (courses.show) atau jika Anda ingin khusus admin: route('admin.courses.show', $course->slug) --}}
-                            <a href="{{ route('courses.show', $course->slug) }}"
+                            <a href="{{ route('admin.courses.show', $course->slug) }}"
                                class="text-blue-700 font-semibold hover:underline">
                                 {{ $course->title }}
                             </a>

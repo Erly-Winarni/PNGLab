@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-4xl mx-auto bg-white p-6 shadow rounded-lg">
+        <div class="max-w-4xl mx-auto p-6 shadow rounded-lg">
 
             <form action="{{ route('teacher.courses.update', $course->id) }}" method="POST">
                 @csrf

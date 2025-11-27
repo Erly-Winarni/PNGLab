@@ -13,9 +13,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-Poppins text-gray-900 antialiased">
-        <div class="min-h-screen flex items-center justify-center bg-black p-4">
+        <div class="min-h-screen flex items-center justify-center bg-[#20232a] p-4">
 
-            <div class="w-full sm:max-w-md bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-full bg-white shadow-md overflow-hidden">
                 {{-- Kelas `mt-6 px-6 py-4` dihapus dari div ini, atau Anda bisa menyesuaikannya --}}
                 {{ $slot }}
             </div>
