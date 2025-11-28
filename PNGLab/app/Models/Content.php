@@ -4,7 +4,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Content extends Model {
-    protected $fillable = ['course_id','title','body','media_url','order','teacher_id'];
+    protected $fillable = [
+    'course_id','title','body','media_url','media_type','media_path','order','teacher_id'];
 
     public function course() {
         return $this->belongsTo(Course::class);
@@ -31,4 +32,27 @@ class Content extends Model {
     public function teacher() {
         return $this->belongsTo(User::class, 'teacher_id');
     }
+
+    public function getYoutubeId()
+    {
+        $url = $this->media_url;
+
+        // youtu.be short link
+        if (preg_match('/youtu\.be\/([^\?]+)/', $url, $m)) {
+            return $m[1];
+        }
+
+        // youtube.com/watch?v=
+        if (preg_match('/v=([^&]+)/', $url, $m)) {
+            return $m[1];
+        }
+
+        // embed links
+        if (preg_match('/embed\/([^?]+)/', $url, $m)) {
+            return $m[1];
+        }
+
+        return null;
+    }
+
 }

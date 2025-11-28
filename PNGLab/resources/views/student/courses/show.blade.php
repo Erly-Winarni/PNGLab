@@ -27,19 +27,23 @@
                         <p class="text-gray-600 text-sm">{{ $content->description }}</p>
                     </div>
 
-                    {{-- Tandai selesai --}}
-                    <form action="{{ route('student.contents.complete', [$course->slug, $content->id]) }}" method="POST">
-                        @csrf
                         @if($content->is_completed)
-                            <button type="button" class="px-3 py-1 bg-green-500 text-white rounded cursor-default">
-                                Selesai
-                            </button>
+                            <form action="{{ route('student.contents.uncomplete', [$course->slug, $content->id]) }}"
+                                method="POST">
+                                @csrf
+                                <button type="submit" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                                    Mark Undone
+                                </button>
+                            </form>
                         @else
-                            <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
-                                Tandai Selesai
-                            </button>
+                            <form action="{{ route('student.contents.complete', [$course->slug, $content->id]) }}"
+                                method="POST">
+                                @csrf
+                                <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                    Tandai Selesai
+                                </button>
+                            </form>
                         @endif
-                    </form>
                 </div>
             @empty
                 <p class="text-gray-500">Belum ada materi untuk course ini.</p>

@@ -57,6 +57,51 @@
                         </p>
                     </div>
                 </div>
+
+                {{-- =======================
+                    DAFTAR STUDENT TERDAFTAR
+                =========================== --}}
+                <div class="mt-10 bg-[#2f333a] p-6 rounded-xl border border-gray-700">
+
+                    <h3 class="text-xl font-semibold text-white mb-4">Student yang Mengikuti Course Ini</h3>
+
+                    @if ($course->students->count() === 0)
+                        <p class="text-gray-400">Belum ada student yang mendaftar.</p>
+                    @else
+                        <table class="w-full text-left text-gray-300">
+                            <thead>
+                                <tr class="border-b border-gray-600">
+                                    <th class="py-2">Nama</th>
+                                    <th class="py-2">Email</th>
+                                    <th class="py-2">Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($course->students as $student)
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-2">{{ $student->name }}</td>
+                                        <td class="py-2">{{ $student->email }}</td>
+
+                                        {{-- Progress pakai method progressFor() --}}
+                                        @php
+                                            $progress = $course->progressFor($student);
+                                        @endphp
+
+                                        <td class="py-2">
+                                            <div class="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                                                <div class="bg-green-500 h-3" style="width: {{ $progress }}%;"></div>
+                                            </div>
+                                            <span class="text-sm text-gray-400">{{ $progress }}%</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+
+                </div>
+
+
                 
                 {{-- Action Button (Contoh: Edit Course) --}}
                 <div class="mt-8 pt-4 border-t border-gray-700 flex justify-end">

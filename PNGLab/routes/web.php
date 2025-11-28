@@ -138,6 +138,9 @@ Route::middleware(['auth', 'role:student'])
             [StudentContentController::class, 'complete'])
             ->name('contents.complete');
 
+        Route::post('/courses/{course:slug}/contents/{content}/uncomplete',
+            [StudentContentController::class, 'uncomplete'])
+            ->name('contents.uncomplete');
     });
 
 /*

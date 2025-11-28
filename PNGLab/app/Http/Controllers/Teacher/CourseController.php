@@ -94,7 +94,15 @@ class CourseController extends Controller
             ->with('success', 'Course berhasil diperbarui.');
     }
 
-    public function show($slug) { $course = Course::where('slug', $slug)->firstOrFail(); return view('teacher.courses.show', compact('course')); }
+    public function show($slug)
+    {
+        $course = Course::where('slug', $slug)
+            ->with(['students', 'contents'])
+            ->firstOrFail();
+
+        return view('teacher.courses.show', compact('course'));
+    }
+
 
     public function destroy(Course $course)
     {

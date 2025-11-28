@@ -32,13 +32,6 @@ class User extends Authenticatable {
                     ->withTimestamps();
     }
 
-    public function completedContents()
-    {
-        return $this->belongsToMany(\App\Models\Content::class, 'content_progress')
-            ->withPivot('is_done', 'done_at')
-            ->wherePivot('is_done', true);
-    }
-
     public function contentProgress()
     {
         return $this->belongsToMany(Content::class, 'content_progress')

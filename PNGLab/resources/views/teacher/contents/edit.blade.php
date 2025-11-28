@@ -6,12 +6,10 @@
     </x-slot>
 
     <div class="p-6">
-        <form action="{{ route('teacher.contents.update', $content->id) }}" method="POST">
+        <form action="{{ route('teacher.contents.update', $content->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-
-            @include('teacher.contents.form')
-
+            @include('teacher.contents.form', ['content' => $content])
         </form>
     </div>
 </x-app-layout>

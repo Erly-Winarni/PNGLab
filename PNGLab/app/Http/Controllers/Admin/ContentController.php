@@ -19,7 +19,7 @@ class ContentController extends Controller
     public function create()
     {
         $courses = Course::all();
-        $teachers = User::where('role', 'teacher')->get(); // 🔥 tambahkan ini
+        $teachers = User::where('role', 'teacher')->get(); 
 
         return view('admin.contents.create', compact('courses', 'teachers'));
     }
@@ -70,5 +70,19 @@ class ContentController extends Controller
 
         return redirect()->route('admin.contents.index')
             ->with('success', 'Materi berhasil dihapus.');
+    }
+
+    private function detectMediaType($url)
+    {
+        if (!$url) return null;
+
+        if (str_contains($url, 'youtube.com') || str_contains($url, 'youtu.be')) {
+            return 'youtube';
+        }
+
+        if (str_ends_with($url, '.pdf')) return 'pdf';
+        if (str_ends_with($url, '.doc') || str_ends_with($url, '.docx')) return 'doc';
+
+        return 'url'; // default
     }
 }

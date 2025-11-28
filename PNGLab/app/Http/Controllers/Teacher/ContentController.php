@@ -24,12 +24,29 @@ class ContentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string',
             'body' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
-            'media_url' => 'nullable|string|max:255',
+            'media_url' => 'nullable|string',
+            'media_file' => 'nullable|file|mimes:pdf,doc,docx',
             'order' => 'nullable|integer|min:0',
         ]);
+
+        $mediaPath = null;
+        $mediaType = null;
+
+        // Jika upload file
+        if ($request->hasFile('media_file')) {
+            $mediaPath = $request->file('media_file')->store('media', 'public');
+            $ext = $request->file('media_file')->getClientOriginalExtension();
+
+            if ($ext == 'pdf') $mediaType = 'pdf';
+            if ($ext == 'doc' || $ext == 'docx') $mediaType = 'doc';
+        }
+        // Jika input URL
+        else if ($request->media_url) {
+            $mediaType = $this->detectMediaType($request->media_url);
+        }
 
         Content::create([
             'title' => $request->title,
@@ -37,11 +54,16 @@ class ContentController extends Controller
             'course_id' => $request->course_id,
             'teacher_id' => auth()->id(),
             'media_url' => $request->media_url,
+            'media_path' => $mediaPath,
+            'media_type' => $mediaType,
             'order' => $request->order ?? 0,
         ]);
 
-        return redirect()->route('teacher.contents.index')->with('success','Materi berhasil dibuat.');
+        return redirect()
+            ->route('teacher.contents.index')
+            ->with('success','Materi berhasil dibuat.');
     }
+
 
     public function edit(Content $content)
     {
@@ -53,20 +75,59 @@ class ContentController extends Controller
 
     public function update(Request $request, Content $content)
     {
-        if($content->teacher_id !== auth()->id()) abort(403);
-
         $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'nullable|string',
+            'title' => 'required',
+            'body'  => 'required',
             'course_id' => 'required|exists:courses,id',
-            'media_url' => 'nullable|string|max:255',
-            'order' => 'nullable|integer|min:0',
+            'media_url' => 'nullable|string',
+            'media_file' => 'nullable|file|mimes:pdf,doc,docx|max:5048',
+            'order' => 'required|integer',
         ]);
 
-        $content->update($request->only('title','body','course_id','media_url','order'));
+        $mediaType = null;
+        $mediaPath = $content->media_path;
+        $mediaUrl  = $content->media_url;
 
-        return redirect()->route('teacher.contents.index')->with('success','Materi berhasil diperbarui.');
+        // Detect URL
+        if ($request->media_url) {
+            [$mediaType, $mediaUrl] = $this->detectUrlType($request->media_url);
+        }
+
+        // Upload file baru
+        if ($request->hasFile('media_file')) {
+
+            // Hapus file lama jika ada
+            if ($content->media_path && \Storage::disk('public')->exists($content->media_path)) {
+                \Storage::disk('public')->delete($content->media_path);
+            }
+
+            $file = $request->file('media_file');
+            $mediaPath = $file->store('contents', 'public');
+
+            // Tentukan tipe
+            $ext = $file->getClientOriginalExtension();
+
+            if ($ext === 'pdf') $mediaType = 'file_pdf';
+            elseif ($ext === 'doc') $mediaType = 'file_doc';
+            elseif ($ext === 'docx') $mediaType = 'file_docx';
+        }
+
+        $content->update([
+            'title'      => $request->title,
+            'body'       => $request->body,
+            'course_id'  => $request->course_id,
+            'media_url'  => $mediaUrl,
+            'media_path' => $mediaPath,
+            'media_type' => $mediaType,
+            'order'      => $request->order,
+        ]);
+
+        return redirect()
+            ->route('teacher.contents.index')
+            ->with('success', 'Materi berhasil diperbarui!');
     }
+
+
 
     public function destroy(Content $content)
     {
@@ -77,4 +138,34 @@ class ContentController extends Controller
         return redirect()->route('teacher.contents.index')
             ->with('success', 'Materi berhasil dihapus.');
     }
+
+    private function detectUrlType($url)
+    {
+        if (!$url) return null;
+
+        // YouTube
+        if (preg_match('/youtu\.be|youtube\.com/', $url)) {
+            return 'youtube';
+        }
+
+        // PDF
+        if (str_ends_with($url, '.pdf')) {
+            return 'pdf';
+        }
+
+        // DOC
+        if (str_ends_with($url, '.doc')) {
+            return 'doc';
+        }
+
+        // DOCX
+        if (str_ends_with($url, '.docx')) {
+            return 'docx';
+        }
+
+        return null;
+    }
+
+
+
 }

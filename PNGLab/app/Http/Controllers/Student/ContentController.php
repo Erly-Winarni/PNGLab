@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ContentController extends Controller
 {
-    public function complete(Content $content)
+    public function complete(Course $course, Content $content)
     {
         $user = auth()->user();
 
@@ -39,36 +39,42 @@ class ContentController extends Controller
 
     public function show(Course $course, Content $content)
     {
-        // Pastikan konten milik course tersebut
-        if ($content->course_id !== $course->id) {
-            abort(404);
-        }
-
         $student = auth()->user();
 
         // Cek apakah konten ini sudah diselesaikan oleh student
-        $isCompleted = $student->completedContents()
-            ->where('content_id', $content->id)
-            ->exists();
+        $isCompleted = $content->is_completed;
 
-        // Ambil konten sebelumnya berdasarkan urutan
-        $previous = $course->contents()
-            ->where('order', $content->order - 1)
+        // Ambil konten sebelumnya
+        $previous = Content::where('course_id', $content->course_id)
+            ->where('order', '<', $content->order)
+            ->orderBy('order', 'desc')
             ->first();
 
         // Cek apakah konten sebelumnya sudah selesai
         $previousCompleted = $previous
-            ? $student->completedContents()
-                ->where('content_id', $previous->id)
-                ->exists()
-            : true; // kalau tidak ada konten sebelumnya, anggap boleh dibuka
+            ? $previous->completedBy()->where('user_id', $student->id)->exists()
+            : true;
 
         return view('student.contents.show', compact(
-            'course',
             'content',
             'isCompleted',
             'previousCompleted',
             'previous'
         ));
     }
+
+    public function uncomplete(Course $course, Content $content)
+    {
+        $user = auth()->user();
+
+        // Update pivot is_done => false
+        $user->contentProgress()->updateExistingPivot($content->id, [
+            'is_done' => false,
+            'done_at' => null,
+        ]);
+
+        return back()->with('success', 'Status materi dibatalkan.');
+    }
+
+
 }
