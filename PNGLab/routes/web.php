@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController; 
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\Student\ContentController as StudentContentController;
-use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
@@ -118,16 +117,17 @@ Route::middleware(['auth', 'role:student'])
     ->prefix('dashboard/student')
     ->name('student.')
     ->group(function () {
+
         Route::get('/', [\App\Http\Controllers\Student\StudentDashboardController::class, 'index'])
             ->name('dashboard');
 
-        Route::get('/catalog', [Student\CourseController::class, 'catalog'])
+        Route::get('/catalog', [StudentCourseController::class, 'catalog'])
             ->name('courses.catalog');
 
-        Route::get('/courses/{course:slug}', [\App\Http\Controllers\Student\CourseController::class, 'show'])
+        Route::get('/courses/{course:slug}', [StudentCourseController::class, 'show'])
             ->name('courses.show');
 
-        Route::post('/courses/{course}/follow', [\App\Http\Controllers\Student\CourseController::class, 'follow'])
+        Route::post('/courses/{course}/follow', [StudentCourseController::class, 'follow'])
             ->name('courses.follow');
 
         Route::get('/courses/{course:slug}/contents/{content}', 
@@ -142,6 +142,7 @@ Route::middleware(['auth', 'role:student'])
             [StudentContentController::class, 'uncomplete'])
             ->name('contents.uncomplete');
     });
+
 
 /*
 |--------------------------------------------------------------------------

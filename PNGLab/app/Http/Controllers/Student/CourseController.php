@@ -29,7 +29,7 @@ class CourseController extends Controller
             $course->is_followed = $user->courses()->where('course_id', $course->id)->exists();
         }
 
-        return view('student.courses.catalog', compact('courses'));
+        return view('student.courses.index', compact('courses'));
     }
 
     // Follow course
