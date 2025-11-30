@@ -92,7 +92,7 @@
                             <p class="font-medium italic mb-4">
                                 Kembangkan kemampuan desainmu dengan materi yang mudah diikuti
                             </p>
-                            <a href="#" class="inline-flex items-center px-6 py-3 bg-white text-[#193053]
+                            <a href="{{ route('student.courses.catalog') }}" class="inline-flex items-center px-6 py-3 bg-white text-[#193053]
                                                 font-bold rounded-full hover:bg-gray-300 transition">
                                 Jelajahi Kelas &rarr;
                             </a>
@@ -116,7 +116,7 @@
                         <p class="text-[#193053]">Tidak ada course yang tersedia saat ini.</p>
                     @else
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            @foreach($courses as $course)
+                            @foreach($topCourses as $course)
                             
                                 @php
                                     $isFollowed = Auth::user()->courses->contains($course->id);
@@ -136,7 +136,7 @@
                                         </p>
                                     </div>
 
-                                    <div class="mt-auto pt-4 border-t border-[#193053]">
+                                    <div class="mt-auto pt-4 border-t border-gray-300">
                                         
                                         @if($isFollowed)
                                             <div class="mb-4">
@@ -180,20 +180,25 @@
 
             </div>
 
-            <aside class="w-80 flex-shrink-0 p-6 mt-5 mr-5 bg-white shadow-lg overflow-y-auto rounded-t-3xl">
+            <aside class="w-full md:w-80 flex-shrink-0 p-6 mt-5 mr-5 mx-auto bg-white shadow-lg overflow-y-auto rounded-t-3xl">
                 <h3 class="font-bold text-xl mb-6 text-[#193053]">Kelas yang Diikuti:</h3>
                 
                 <div class="space-y-4">
                     
                     @php
-                        $followedCourses = $courses->filter(fn($c) => Auth::user()->courses->contains($c->id));
+                        $followedCourses = Auth::user()->courses()
+                            ->with('teacher')
+                            ->withCount('contents')
+                            ->get();
                     @endphp
 
                     @forelse($followedCourses as $course)
                         @php
-                            $progress = method_exists($course, 'progressFor') ? $course->progressFor(Auth::user()) : 0;
+                            $progress = method_exists($course, 'progressFor') 
+                                ? $course->progressFor(Auth::user()) 
+                                : 0;
                         @endphp
-                        
+
                         <a href="{{ route('student.courses.show', $course->slug) }}" class="block">
                             <div class="bg-[#446AA6] rounded-xl p-4 hover:bg-[#264069] transition">
                                 <h4 class="font-semibold truncate">{{ $course->title }}</h4>
@@ -201,15 +206,15 @@
 
                                 <div class="flex items-center mt-2">
                                     <div class="w-full bg-white rounded-full h-2">
-                                        <div class="bg-[#52A397] h-2 rounded-full" 
-                                            style="width: {{ $progress }}%"></div>
+                                        <div class="bg-[#52A397] h-2 rounded-full" style="width: {{ $progress }}%"></div>
                                     </div>
                                     <span class="text-xs ml-2">{{ $progress }}%</span>
                                 </div>
                             </div>
                         </a>
+
                     @empty
-                        <p class="text-sm text-gray-400">Anda belum mengikuti kelas apa pun.</p>
+                        <p class="text-sm text-gray-400">Kamu belum mengikuti kelas apapun.</p>
                     @endforelse
 
                 </div>

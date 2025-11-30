@@ -16,7 +16,6 @@ class ProfileController extends Controller
             'user' => $user,
         ];
 
-        // Student
         if ($user->role === 'student') {
             $data['courses'] = $user->courses()
                 ->with(['contents', 'teacher'])
@@ -33,7 +32,6 @@ class ProfileController extends Controller
             }
         }
 
-        // Teacher
         if ($user->role === 'teacher') {
             $data['courses'] = Course::where('teacher_id', $user->id)
                 ->withCount('students')
@@ -41,7 +39,6 @@ class ProfileController extends Controller
                 ->get();
         }
 
-        // Admin
         if ($user->role === 'admin') {
             $data['totalUsers'] = \App\Models\User::count();
             $data['totalStudents'] = \App\Models\User::where('role', 'student')->count();
@@ -52,9 +49,6 @@ class ProfileController extends Controller
         return view('profile.index', $data);
     }
 
-    // ==========================
-    //     EDIT PROFILE
-    // ==========================
     public function edit()
     {
         return view('profile.edit', ['user' => auth()->user()]);
@@ -65,9 +59,19 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email:rfc,dns',
+            ],
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'name.required' => 'Nama tidak boleh kosong.',
+            'email.required' => 'Email harus diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'avatar.image' => 'Avatar harus berupa gambar.',
+            'avatar.mimes' => 'Avatar harus berformat jpg, jpeg atau png.',
+            'avatar.max' => 'Ukuran avatar tidak boleh lebih dari 2MB.',
         ]);
 
         if ($request->hasFile('avatar')) {
@@ -92,7 +96,18 @@ class ProfileController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'password' => 'required|min:6|confirmed',
+            'password' => [
+                'required',
+                'confirmed',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+            ],
+        ], [
+            'current_password.required' => 'Password lama harus diisi.',
+            'password.required' => 'Password baru harus diisi.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.regex' => 'Password harus mengandung minimal 1 huruf besar, huruf kecil, angka, dan simbol.',
         ]);
 
         $user = auth()->user();
@@ -106,5 +121,4 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.index')->with('success', 'Password berhasil diperbarui!');
     }
-
 }

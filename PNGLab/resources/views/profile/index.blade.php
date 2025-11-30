@@ -1,33 +1,30 @@
 <x-app-layout>
+    @php
+        $profilePhoto = $user->avatar 
+            ? asset('storage/' . $user->avatar)
+            : asset('images/profile-default.png'); 
+    @endphp
     <div class="min-h-screen py-10"> 
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {{-- Kolom 1: Kartu Informasi Pengguna (ID Card) --}}
+        <h1 class="max-w-7xl mx-auto px-4 text-3xl ml-4 font-extrabold text-[#193053] mb-8">
+            Profile Pengguna
+        </h1>
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-28 md:space-x-12">
             <div class="md:col-span-1 lg:col-span-1 max-w-sm mx-auto w-full"> 
-                
-                {{-- 1. Kartu Informasi Pengguna (Identitas) --}}
-                <div class="relative w-full p-6 rounded-3xl shadow-2xl overflow-hidden mb-8 min-h-[450px]">
-                    
-                    {{-- BACKGROUND IMAGE (Menggantikan style background-image CSS) --}}
-                    <img src="{{ asset('images/id-card2.png') }}" 
+                <div class="relative w-[410px] p-12 mb-8 min-h-[500px]">
+                    <img src="{{ asset('images/gantungan.png') }}" 
+                         alt="Hiasan Gantungan ID Card" 
+                         class="absolute top-12 left-[214px] transform -translate-x-1/2 -translate-y-full w-36 h-auto z-10">
+
+                    <img src="{{ asset('images/frame-profile.png') }}" 
                         alt="Background ID Card" 
                         class="absolute inset-0 w-full h-full object-cover z-0">
-                    
-                    {{-- Konten Kartu (Lapisan Paling Atas) --}}
-                    <div class="relative z-20 flex flex-col items-center text-center pt-8 text-white">
 
-                        {{-- === Detail Avatar (Dengan Gradient Stroke & Tombol Edit) === --}}
-                        <div class="relative w-24 h-24 p-1 rounded-full mb-3"
-                            style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);">
-                            
+                    <div class="relative z-20 flex flex-col items-center text-center pt-8 text-white">
+                        <div class="relative w-24 h-24 p-1 rounded-full mb-3 bg-gradient-to-b from-[#446AA6] to-[#5ED68A]">
                             <div class="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden border-4 border-gray-900">
-                                @if ($user->avatar)
-                                    <img src="{{ asset('storage/' . $user->avatar) }}"
-                                        class="w-full h-full object-cover rounded-full" alt="Avatar">
-                                @else
-                                    <div class="w-full h-full bg-blue-600 rounded-full flex items-center justify-center">
-                                        <span class="text-3xl font-bold text-white">{{ substr($user->name, 0, 1) ?? 'G' }}</span>
-                                    </div>
-                                @endif
+                                    <img src="{{ $profilePhoto }}"
+                                    class="w-full h-full object-cover rounded-full" 
+                                    alt="Avatar Pengguna">
                             </div>
                             
                             <a href="{{ route('profile.edit') }}"
@@ -40,57 +37,41 @@
                                 </svg>
                             </a>
                         </div>
-                        {{-- === END Detail Avatar === --}}
                         
-                        {{-- Nama & Email --}}
                         <h2 class="text-xl font-bold leading-tight">{{ $user->name }}</h2>
                         <p class="text-sm font-light text-gray-200">{{ $user->email }}</p>
-                        <p class="text-xs font-medium text-blue-300 mt-1">{{ ucfirst($user->role) }}</p>
+                        <p class="text-md font-bold text-[#193053] mt-1">{{ ucfirst($user->role) }}</p>
 
 
-                        {{-- Tombol Ganti Kata Sandi (Simulasi Teks Password) --}}
                         <div class="mt-5 w-3/4 mx-auto bg-gray-800 bg-opacity-50 p-2 rounded-full border border-gray-700">
                             <span class="tracking-widest text-lg">••••••••••</span>
                         </div>
 
-                        {{-- Link Edit Password --}}
                         <a href="{{ route('profile.password.edit') }}"
-                        class="mt-3 px-4 py-1 bg-blue-600 text-white rounded-full text-sm font-semibold hover:bg-blue-700 transition">
+                        class="mt-3 px-4 py-1 bg-[#4670A4] text-white rounded-full text-sm font-semibold hover:bg-[#264069] transition">
                             Ganti Kata Sandi
                         </a>
 
-                        {{-- Link Edit Profil --}}
                         <a href="{{ route('profile.edit') }}"
-                        class="mt-3 text-xs text-white opacity-70 hover:opacity-100 transition">
+                        class="mt-3 text-sm px-4 py-1 bg-white text-[#193053] rounded-full font-semibold hover:bg-gray-300  hover:opacity-100 transition">
                             Edit Informasi Profil &rarr;
                         </a>
                     </div>
                 </div>
             </div>
 
-            {{-- Kolom 2: Kartu Informasi Tambahan (Ini akan memakan 1 atau 2 kolom sisa) --}}
             <div class="md:col-span-1 lg:col-span-2"> 
-                {{-- 2. Kartu Informasi Tambahan (Kartu Gradien Besar) --}}
-                <div class="relative w-full p-6 md:p-8 rounded-3xl shadow-2xl min-h-[450px]"
-                    style="
-                        background: linear-gradient(135deg, #ffc837 0%, #ff8008 100%);
-                        color: #333; 
-                    ">
-                    
-                    {{-- JUDUL Kartu Tambahan --}}
-                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-600 border-opacity-30">
+                <div class="relative w-full p-4 md:p-8 rounded-3xl shadow-2xl min-h-[500px] bg-white">
+                    <h2 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-600 text-[#193053] border-opacity-30">
                         @if ($user->role === 'student')
-                            Kursus yang Diikuti 🎓
+                            Kelas yang Diikuti 
                         @elseif ($user->role === 'teacher')
-                            Kursus yang Diajar 📚
+                            Kelas yang Diajar 
                         @elseif ($user->role === 'admin')
-                            Statistik Platform 📊
+                            Statistik Platform 
                         @endif
                     </h2>
                     
-                    {{-- Konten Role (LOGIC TIDAK DIUBAH) --}}
-
-                    {{-- Student --}}
                     @if ($user->role === 'student')
                         <div class="space-y-6">
                             @forelse ($courses as $course)
@@ -99,11 +80,11 @@
                                     <p class="text-sm text-gray-700">Pengajar: {{ $course->teacher->name }}</p>
 
                                     <div class="mt-2">
-                                        <div class="w-full bg-yellow-200 rounded-full h-3">
-                                            <div class="bg-green-600 h-3 rounded-full"
+                                        <div class="w-full bg-[#CFCFCF] rounded-full h-3">
+                                            <div class="bg-[#52A397] h-3 rounded-full"
                                                 style="width: {{ $course->progress }}%"></div>
                                         </div>
-                                        <p class="text-sm mt-1 text-gray-800">Progress: **{{ $course->progress }}%**</p>
+                                        <p class="text-sm mt-1 text-gray-800">Progress: {{ $course->progress }}%</p>
                                     </div>
                                 </div>
                             @empty
@@ -112,7 +93,6 @@
                         </div>
                     @endif
 
-                    {{-- Teacher --}}
                     @if ($user->role === 'teacher')
                         <div class="space-y-6">
                             @forelse ($courses as $course)
@@ -127,7 +107,6 @@
                         </div>
                     @endif
 
-                    {{-- Admin --}}
                     @if ($user->role === 'admin')
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-white p-4 rounded-xl shadow-md text-center">
@@ -153,7 +132,6 @@
                     @endif
                 </div>
             </div>
-
         </div>
     </div>
 </x-app-layout>

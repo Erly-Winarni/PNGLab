@@ -12,31 +12,27 @@ class StudentDashboardController extends Controller
     {
         $user = auth()->user();
 
-        // Query dasar
         $coursesQuery = Course::with(['teacher', 'category']);
 
-        // SEARCH
+        
         if ($request->filled('search')) {
             $coursesQuery->where('title', 'like', "%{$request->search}%");
         }
 
-        // FILTER KATEGORI
+        
         if ($request->filled('category')) {
             $coursesQuery->where('category_id', $request->category);
         }
 
-        // Ambil hasil
         $courses = $coursesQuery->get();
 
-        // Popular course
-        $popularCourses = Course::withCount('students')
-            ->orderByDesc('students_count')
+       $topCourses = Course::withCount('students')
+            ->orderBy('students_count', 'desc')
             ->take(5)
             ->get();
 
-        // Data kategori
         $categories = \App\Models\Category::all();
 
-        return view('student.dashboard', compact('user', 'courses', 'popularCourses', 'categories'));
+        return view('student.dashboard', compact('user', 'courses', 'topCourses', 'categories'));
     }
 }

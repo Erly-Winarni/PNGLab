@@ -11,36 +11,57 @@ use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Show register form
-     */
     public function create()
     {
         return view('auth.register');
     }
 
-    /**
-     * Store user
-     */
     public function store(Request $request)
     {
         $request->validate([
             'name'      => ['required', 'string', 'max:255'],
-            'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password'  => ['required', 'confirmed', Rules\Password::defaults()],
-
-            // custom field
+            'email'     => [
+                'required',
+                'string',
+                'max:255',
+                'unique:users',
+                'email:rfc,dns',
+            ],
+            'password'  => [
+                'required',
+                'confirmed',
+                'min:8',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[@$!%*#?&]/',
+            ],
             'role'      => ['required', 'in:student,teacher'],
             'avatar'    => ['nullable', 'image', 'max:2048'],
+        ], [
+           
+            'name.required'         => 'Nama wajib diisi.',
+            'email.required'        => 'Email wajib diisi.',
+            'email.unique'          => 'Email ini sudah terdaftar.',
+            'email.email' => 'Format email tidak valid.',
+
+            'password.required'     => 'Password wajib diisi.',
+            'password.confirmed'    => 'Konfirmasi password tidak cocok.',
+            'password.min'          => 'Password minimal 8 karakter.',
+            'password.regex'        => 'Password harus mengandung huruf besar, huruf kecil, angka, dan simbol.',
+
+            'role.required'         => 'Role wajib dipilih.',
+            'role.in'               => 'Role tidak valid.',
+
+            'avatar.image'          => 'Avatar harus berupa gambar.',
+            'avatar.max'            => 'Avatar maksimal 2MB.',
         ]);
 
-        // upload avatar
         $avatarPath = null;
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
         }
 
-        // create user
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
@@ -53,11 +74,8 @@ class RegisteredUserController extends Controller
 
         auth()->login($user);
 
-        // redirect sesuai role
-        if ($user->role === 'teacher') {
-            return redirect()->route('teacher.dashboard');
-        }
-
-        return redirect()->route('student.dashboard');
+        return $user->role === 'teacher'
+            ? redirect()->route('teacher.dashboard')
+            : redirect()->route('student.dashboard');
     }
 }
