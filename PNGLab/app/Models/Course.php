@@ -3,6 +3,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Content;
+use App\Models\Category;
 use Illuminate\Support\Str;
 
 class Course extends Model {
@@ -21,7 +23,7 @@ class Course extends Model {
 
     public function contents()
     {
-        return $this->hasMany(\App\Models\Content::class);
+        return $this->hasMany(Content::class);
     }
 
     public function category()
@@ -49,10 +51,8 @@ class Course extends Model {
         static::creating(function ($course) {
             $slug = Str::slug($course->title);
 
-            // Cek apakah slug sudah ada
             $count = Course::where('slug', 'like', $slug . '%')->count();
 
-            // Jika sudah ada, tambahkan angka di akhir
             $course->slug = $count ? "{$slug}-{$count}" : $slug;
         });
     }

@@ -3,6 +3,12 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\User;
+use App\Models\Content;
+use App\Models\Category;
+use App\Models\Course;
+use App\Models\CourseUser;
+
 
 class User extends Authenticatable {
     use Notifiable;
@@ -18,17 +24,19 @@ class User extends Authenticatable {
         'is_active' => 'boolean',
     ];
     
-    // relations
     public function coursesTeaching() {
         return $this->hasMany(Course::class, 'teacher_id');
     }
 
     public function coursesEnrolled() {
-        return $this->belongsToMany(Course::class)->withTimestamps()->using(\App\Models\CourseUser::class);
+        return $this->belongsToMany(Course::class)
+                    ->withTimestamps()
+                    ->withPivot('enrolled_at');
     }
 
+
     public function courses() {
-        return $this->belongsToMany(\App\Models\Course::class, 'course_user')
+        return $this->belongsToMany(Course::class, 'course_user')
                     ->withTimestamps();
     }
 
@@ -39,7 +47,6 @@ class User extends Authenticatable {
             ->withTimestamps();
     }
 
-    // role helpers
     public function isAdmin() { return $this->role === 'admin'; }
     public function isTeacher() { return $this->role === 'teacher'; }
     public function isStudent() { return $this->role === 'student'; }
