@@ -1,10 +1,6 @@
 #  🎨 PNGLab
 PNGLab adalah platform kursus  yang berfokus pada pelatihan mendalam di bidang **Desain Grafis ataupun Editing**. PNGLab dirancang untuk menjembatani Guru profesional dengan Siswa yang haus akan keterampilan visual.
 
-## Fitur Utama & Keunggulan
-
-Kami membagi fungsionalitas berdasarkan empat peran pengguna inti yaitu
-
 ### Peran Pengguna & Akses
 
 | Peran | Fokus Peran | Akses |
