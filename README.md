@@ -24,10 +24,6 @@ PNGLab adalah platform kursus  yang berfokus pada pelatihan mendalam di bidang *
 * **Materi**: Menampilkan materi-materi terkait dengan kelas dan dilengkapi fitur penting: **"Tandai Selesai"** dan tombol **"Lanjutkan"** agar pembelajaran terstruktur.
 * **Profile**: Dashboard progres personal. Siswa melihat progres kursus desainnya, Guru memantau kinerja kelasnya dan Admin memantau Statistik User dan Kelas.
 
-## Panduan Instalasi (Development)
-
-Proyek dibangun di atas **Laravel** dan **Breeze**.
-
 ## Requirement Sistem (XAMPP)
 - XAMPP terbaru (PHP ≥ 8.1, MySQL, Apache)
 - Composer
@@ -55,7 +51,15 @@ composer install
 ```bash
 npm install
 ```
-#### 3. Build asset frontend:
+#### 3. Install Breeze:
+```bash
+composer require laravel/breeze --dev
+```
+#### 4. Jalankan Installer Breeze:
+```bash
+php artisan breeze:install
+```
+#### 5. Build asset frontend:
 ```bash
 npm run dev
 ```
