@@ -32,12 +32,57 @@ Kami membagi fungsionalitas berdasarkan empat peran pengguna inti yaitu
 
 Proyek dibangun di atas **Laravel** dan **Breeze**.
 
-### Prasyarat
+## Requirement Sistem (XAMPP)
+- XAMPP terbaru (PHP ≥ 8.1, MySQL, Apache)
+- Composer
+- Node.js & NPM / Yarn
+- Laravel 10
 
-Pastikan Anda memiliki: PHP >= 8.1, Composer, Node.js/NPM, dan Database (misal: MySQL).
-
+## Panduan Lengkap Instalasi PNGLab di XAMPP
 ### 1. Kloning Repositori
-
+#### 1. Buka terminal (CMD / PowerShell / Git Bash)
+#### 2. Masuk ke folder `htdocs` XAMPP:
 ```bash
-git clone [URL-REPOSITORI-ANDA]
+cd C:\xampp\htdocs
+```
+#### 3. Clone repository PNGLab:
+```bash
+git clone https://github.com/Erly-Winarni/PNGLab.git
 cd PNGLab
+```
+## 2. Install Dependency
+#### 1. Install PHP dependencies:
+```bash
+composer install
+```
+#### 2. Install Node.js dependencies:
+```bash
+npm install
+```
+#### 3. Build asset frontend:
+```bash
+npm run dev
+```
+### 3. Buat Database
+#### 1.Jalankan migration untuk membuat database dan tabelnya:
+```bash
+php artisan migrate
+```
+#### 2.Jalankan seeder untuk data awal:
+```bash
+php artisan db:seed
+```
+### 4. Nyalakan Server Lokal
+#### 1.Start Apache dan MySQL di XAMPP Control Panel
+#### 2.Jalankan Laravel server:
+```bash
+php artisan serve
+```
+#### 3.Buka browser dan akses web:
+```bash
+http://127.0.0.1:8000
+```
+### 5. Login Awal
+#### 1.Gunakan akun yang dibuat melalui seeder atau register di halaman login
+#### 2.Admin dapat langsung login untuk mengelola pengguna, course/kelas, kategori dan konten
+
