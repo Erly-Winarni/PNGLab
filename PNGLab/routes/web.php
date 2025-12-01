@@ -82,8 +82,11 @@ Route::middleware(['auth', 'role:teacher'])
 
         Route::resource('contents', \App\Http\Controllers\Teacher\ContentController::class);
 
-        Route::delete('/media/{id}', [TeacherContentController::class, 'deleteMedia'])
-            ->name('media.delete');
+        Route::get('/contents/{content}/media', [TeacherContentController::class, 'manageMedia']
+            )->name('contents.media.index');
+
+        Route::delete('/contents/{media}/delete-media', [TeacherContentController::class, 'deleteMedia']
+            )->name('contents.media.delete');
     });
 
 

@@ -30,36 +30,27 @@ class ContentController extends Controller
             'title'       => 'required|string',
             'body'        => 'nullable|string',
             'course_id'   => 'required|exists:courses,id',
-
-           
             'media_urls.*' => 'nullable|string',
-
-           
             'media_files.*' => 'nullable|file|mimes:pdf',
-
             'order' => 'nullable|integer|min:0',
         ]);
 
-        // Ambil course yang dipilih
         $course = Course::findOrFail($request->course_id);
 
-        // Cek apakah course punya guru
         if (!$course->teacher_id) {
             return back()->withErrors([
                 'course_id' => 'Course ini belum memiliki guru.'
             ])->withInput();
         }
 
-        // Buat konten baru
         $content = Content::create([
             'title'      => $request->title,
             'body'       => $request->body,
             'course_id'  => $request->course_id,
-            'teacher_id' => $course->teacher_id, // otomatis ikut guru di course
+            'teacher_id' => $course->teacher_id, 
             'order'      => $request->order ?? 0,
         ]);
 
-        /** ===== SIMPAN URL MULTIPLE ===== */
         if ($request->media_urls) {
             foreach ($request->media_urls as $url) {
                 if ($url) {
@@ -71,7 +62,6 @@ class ContentController extends Controller
             }
         }
 
-        /** ===== SIMPAN PDF MULTIPLE ===== */
         if ($request->hasFile('media_files')) {
             foreach ($request->media_files as $file) {
                 $path = $file->store('media', 'public');
@@ -104,13 +94,8 @@ class ContentController extends Controller
             'title'       => 'required|string',
             'body'        => 'nullable|string',
             'course_id'   => 'required|exists:courses,id',
-            
-            // multiple URL
             'media_urls.*' => 'nullable|string',
-
-            // multiple PDF
             'media_files.*' => 'nullable|file|mimes:pdf',
-
             'order' => 'nullable|integer|min:0',
         ]);
 
@@ -127,7 +112,6 @@ class ContentController extends Controller
 
         $content->update($updateData);
 
-        /** Tambahkan URL baru */
         if ($request->media_urls) {
             foreach ($request->media_urls as $url) {
                 if ($url) {
@@ -139,7 +123,6 @@ class ContentController extends Controller
             }
         }
 
-        /** Tambahkan PDF baru */
         if ($request->hasFile('media_files')) {
             foreach ($request->media_files as $file) {
                 $path = $file->store('media', 'public');

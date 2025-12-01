@@ -39,10 +39,7 @@ class CourseController extends Controller
             'description' => $request->description,
             'start_date'  => $request->start_date,
             'end_date'    => $request->end_date,
-
-            // 🔥 FIX: Guru diambil otomatis
             'teacher_id'  => auth()->id(),
-
             'category_id' => $request->category_id,
             'is_active'   => $request->has('is_active'),
             'max_students' => $request->max_students,
@@ -54,7 +51,6 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        // Boleh edit hanya jika pemiliknya
         if ($course->teacher_id !== auth()->id()) {
             abort(403);
         }
@@ -97,10 +93,18 @@ class CourseController extends Controller
     public function show($slug)
     {
         $course = Course::where('slug', $slug)
-            ->with(['students', 'contents'])
+            ->with(['contents', 'category', 'teacher'])
             ->firstOrFail();
 
-        return view('teacher.courses.show', compact('course'));
+        if ($course->teacher_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $students = $course->students()
+                           ->orderBy('name')
+                           ->paginate(5);
+        
+        return view('teacher.courses.show', compact('course', 'students'));
     }
 
 
@@ -112,7 +116,7 @@ class CourseController extends Controller
 
         $course->delete();
 
-        return redirect()->route('teacher.dashboard')
+        return redirect()->route('teacher.course.index')
             ->with('success', 'Course berhasil dihapus.');
     }
 }

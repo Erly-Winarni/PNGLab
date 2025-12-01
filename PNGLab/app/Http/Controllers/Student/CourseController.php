@@ -14,23 +14,18 @@ class CourseController extends Controller
     {
         $user = auth()->user();
 
-        // Query dasar
         $coursesQuery = Course::with(['teacher', 'contents', 'category']);
 
-        // Search
         if ($request->filled('search')) {
             $coursesQuery->where('title', 'like', '%' . $request->search . '%');
         }
 
-        // Filter kategori
         if ($request->filled('category')) {
             $coursesQuery->where('category_id', $request->category);
         }
 
-        // Pagination → untuk links()
         $courses = $coursesQuery->paginate(9);
 
-        // Tambahkan progress & status follow
         foreach ($courses as $course) {
             $completed = $course->contents()
                 ->whereHas('completedBy', fn($q) => $q->where('user_id', $user->id))
@@ -45,7 +40,6 @@ class CourseController extends Controller
                 ->exists();
         }
 
-        // Ambil kategori (dropdown)
         $categories = Category::all();
 
         return view('student.courses.index', compact(

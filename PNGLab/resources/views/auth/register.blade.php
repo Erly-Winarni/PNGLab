@@ -1,31 +1,22 @@
 <x-guest-layout>
     <div class="min-h-screen flex items-center justify-center bg-[#20232a] p-4 pt-16 relative overflow-hidden">
+        <img src="{{ asset('images/surat-depan.png') }}" class="absolute inset-0 w-full h-full top-56 object-contain pointer-events-none z-20">
 
-        {{-- Background surat depan --}}
-        <img src="{{ asset('images/surat-depan.png') }}"
-             class="absolute inset-0 w-full h-full top-96 object-contain pointer-events-none z-20">
-
-        {{-- Card Register --}}
-        <div class="relative z-10 w-full max-w-md bg-gradient-to-b from-[#F6FF76] to-[#E89E66] rounded-2xl shadow-xl px-6 pt-16 pb-36">
-
-            {{-- Judul Register --}}
-            <h1 class="text-3xl font-bold text-white bg-blue-700 px-6 py-1 inline-block 
-                       absolute -top-6 left-1/2 transform -translate-x-1/2 -rotate-3 shadow-md">
+        <div class="relative z-10 w-full max-w-md bg-gradient-to-br from-[#446AA6] to-[#5ED68A] rounded-2xl shadow-xl px-6 pt-16 pb-36">
+            <h1 class="text-3xl font-bold text-[#446AA6] bg-white px-6 py-1 inline-block absolute -top-6 left-1/2 transform -translate-x-1/2 -rotate-3 shadow-md">
                 Daftar
             </h1>
 
-            {{-- Tombol Back --}}
             <a href="{{ url('/') }}"
-                class="absolute -top-2 left-4 text-blue-700 hover:text-blue-800 text-2xl font-bold mt-5">
+                class="absolute -top-2 left-4 text-white hover:text-[#264069] text-2xl font-bold mt-5">
                 &lt;
             </a>
 
-            {{-- FORM REGISTER --}}
             <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-4">
-                    <label class="block font-semibold text-gray-800">Nama Lengkap</label>
+                    <label class="block font-semibold text-white">Nama Lengkap</label>
                     <input type="text" name="name"
                         class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
                         value="{{ old('name') }}">
@@ -35,7 +26,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block font-semibold text-gray-800">Email</label>
+                    <label class="block font-semibold text-white">Email</label>
                     <input type="email" name="email"
                         class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
                         value="{{ old('email') }}">
@@ -45,7 +36,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block font-semibold text-gray-800">Daftar Sebagai</label>
+                    <label class="block font-semibold text-white">Daftar Sebagai</label>
                     <select name="role"
                             class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white">
                         <option value="">-- Pilih Role --</option>
@@ -57,9 +48,8 @@
                     @enderror
                 </div>
 
-                {{-- Avatar --}}
                 <div class="mb-4">
-                    <label class="block font-semibold text-gray-800">Foto Profil (opsional)</label>
+                    <label class="block font-semibold text-white">Foto Profil (opsional)</label>
                     <input type="file" name="avatar"
                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white">
                     <p class="text-xs text-gray-600 mt-1">Maks 2MB. Format: jpg, png.</p>
@@ -68,9 +58,8 @@
                     @enderror
                 </div>
 
-                {{-- Password --}}
                 <div class="mb-4">
-                    <label class="block font-semibold text-gray-800">Password</label>
+                    <label class="block font-semibold text-white">Password</label>
                     <input type="password" name="password"
                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
                            required>
@@ -79,9 +68,8 @@
                     @enderror
                 </div>
 
-                {{-- Konfirmasi Password --}}
                 <div class="mb-6">
-                    <label class="block font-semibold text-gray-800">Konfirmasi Password</label>
+                    <label class="block font-semibold text-white">Konfirmasi Password</label>
                     <input type="password" name="password_confirmation"
                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
                            required>
@@ -90,22 +78,18 @@
                     @enderror
                 </div>
 
-                {{-- Tombol Submit --}}
-                <button type="submit"
-                    class="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition">
+                <button type="submit" class="w-full bg-[#446AA6] text-white py-2 rounded-lg font-semibold hover:bg-[#264069] transition">
                     Daftar Sekarang
                 </button>
 
             </form>
 
-            {{-- Link Login --}}
-            <p class="text-center mt-4 text-sm text-gray-700">
+            <p class="text-center mt-4 text-sm text-white">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-blue-700 font-semibold hover:underline">
+                <a href="{{ route('login') }}" class="text-[#264069] font-semibold hover:underline">
                     Masuk
                 </a>
             </p>
-
         </div>
     </div>
 </x-guest-layout>

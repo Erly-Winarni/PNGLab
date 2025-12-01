@@ -34,7 +34,7 @@
                 </div>
 
                 <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white border rounded-xl shadow-lg py-2 z-50">
-                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-[#193053] hover:bg-gray-200 transition">Profile</a>
+                    <a href="{{ route('profile.index') }}" class="block px-4 py-2 text-sm text-[#193053] hover:bg-gray-200 transition">Profile</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full text-left px-4 py-2 text-sm text-[#193053] hover:bg-red-700 hover:text-white transition">
@@ -51,28 +51,20 @@
                     method="GET" 
                     class="items-center gap-2 p-1 mx-4 flex-grow max-w-xl flex">
                     <div class="relative w-full"> 
-                        <img src="{{ asset('images/PNGY-searchbar.PNG') }}" 
-                            alt="Ikon Pencarian Penguin" 
-                            class="absolute -left-2 top-[28px] transform -translate-y-1/2 h-auto w-[180px] z-10 pointer-events-none">
+                        <img src="{{ asset('images/PNGY-searchbar.PNG') }}" alt="Ikon Pencarian Penguin" class="absolute -left-2 top-[28px] transform -translate-y-1/2 h-auto w-[180px] z-10 pointer-events-none">
                         
-                        <input type="text" 
-                            name="search"
-                            value="{{ request('search') }}"
-                            placeholder="    Cari kelas..."
-                            class="border-none rounded-lg shadow-lg 
-                                pl-12 py-3 text-[#193053] placeholder-gray-400 
-                                focus:ring-blue-500 focus:bg-gray-200 w-full transition"> 
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="    Cari kelas..."
+                            class="border-none rounded-lg shadow-lg pl-12 py-3 text-[#193053] placeholder-gray-400 focus:ring-blue-500 focus:bg-gray-200 w-full transition"> 
                         </div>
                     <button type="submit" 
                             class="bg-[#446AA6] text-white px-3 py-2 rounded-xl hover:bg-[#264069] transition flex-shrink-0">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <img src="{{ asset('images/icon-search.png') }}" alt="Ikon Pencarian" class="h-5 w-5 object-contain">
                     </button>
 
                     <select name="category" 
                             id="category_filter_top"
                             onchange="this.form.submit()"
-                            class="border-none rounded-2xl px-4 py-2 bg-[#446AA6] hover:bg-[#264069] text-white
-                                    focus:ring-indigo-500 focus:bg-[#264069] transition hidden lg:block flex-shrink-0">
+                            class="border-none rounded-2xl px-4 py-2 bg-[#446AA6] hover:bg-[#264069] text-white focus:ring-indigo-500 focus:bg-[#264069] transition hidden lg:block flex-shrink-0">
                         <option value="" {{ !request('category') ? 'selected' : '' }}>Kategori</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" 
@@ -92,8 +84,7 @@
                             <p class="font-medium italic mb-4">
                                 Kembangkan kemampuan desainmu dengan materi yang mudah diikuti
                             </p>
-                            <a href="{{ route('student.courses.catalog') }}" class="inline-flex items-center px-6 py-3 bg-white text-[#193053]
-                                                font-bold rounded-full hover:bg-gray-300 transition">
+                            <a href="{{ route('student.courses.catalog') }}" class="inline-flex items-center px-6 py-3 bg-white text-[#193053] font-bold rounded-full hover:bg-gray-300 transition">
                                 Jelajahi Kelas &rarr;
                             </a>
                         </div>
@@ -101,9 +92,7 @@
 
                     <div class="hidden md:block"> 
                         <img src="{{ asset('images/PNGY-dash-shadow.png') }}" 
-                            alt="Ilustrasi PNGY"
-                            class="absolute h-auto w-[650px] bottom-24 -right-20 z-20 
-                                    transform translate-y-1/4 pointer-events-none"> 
+                            alt="Ilustrasi PNGY" class="absolute h-auto w-[650px] bottom-24 -right-20 z-20 transform translate-y-1/4 pointer-events-none"> 
                     </div>
                 </div>
 

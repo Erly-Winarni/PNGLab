@@ -19,20 +19,22 @@ class ProfileController extends Controller
         if ($user->role === 'student') {
             $data['courses'] = $user->courses()
                 ->where('is_active', 1)
-                ->with(['contents', 'teacher'])
+                ->with(['teacher', 'category']) 
                 ->get();
 
             foreach ($data['courses'] as $course) {
+                $totalContents = $course->contents()->count();
+
                 $completed = $course->contents()
                     ->whereHas('completedBy', fn($q) => $q->where('user_id', $user->id))
                     ->count();
 
-                $course->progress = $course->contents->count() > 0
-                    ? round(($completed / $course->contents->count()) * 100)
+                $course->progress = $totalContents > 0
+                    ? round(($completed / $totalContents) * 100)
                     : 0;
             }
         }
-
+        
         if ($user->role === 'teacher') {
             $data['courses'] = Course::where('teacher_id', $user->id)
                 ->withCount('students')

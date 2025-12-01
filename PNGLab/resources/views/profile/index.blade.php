@@ -11,37 +11,27 @@
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-28 md:space-x-12">
             <div class="md:col-span-1 lg:col-span-1 max-w-sm mx-auto w-full"> 
                 <div class="relative w-[410px] p-12 mb-8 min-h-[500px]">
-                    <img src="{{ asset('images/gantungan.png') }}" 
-                         alt="Hiasan Gantungan ID Card" 
-                         class="absolute top-12 left-[214px] transform -translate-x-1/2 -translate-y-full w-36 h-auto z-10">
+                    <img src="{{ asset('images/gantungan.png') }}" alt="Hiasan Gantungan ID Card" class="absolute top-12 left-[214px] transform -translate-x-1/2 -translate-y-full w-36 h-auto z-10">
 
-                    <img src="{{ asset('images/frame-profile.png') }}" 
-                        alt="Background ID Card" 
-                        class="absolute inset-0 w-full h-full object-cover z-0">
+                    <img src="{{ asset('images/frame-profile.png') }}" alt="Background ID Card" class="absolute inset-0 w-full h-full object-cover z-0">
 
                     <div class="relative z-20 flex flex-col items-center text-center pt-8 text-white">
                         <div class="relative w-24 h-24 p-1 rounded-full mb-3 bg-gradient-to-b from-[#446AA6] to-[#5ED68A]">
                             <div class="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden border-4 border-gray-900">
-                                    <img src="{{ $profilePhoto }}"
-                                    class="w-full h-full object-cover rounded-full" 
-                                    alt="Avatar Pengguna">
+                                    <img src="{{ $profilePhoto }}" alt="Avatar Pengguna" class="w-full h-full object-cover rounded-full">
                             </div>
                             
                             <a href="{{ route('profile.edit') }}"
                             class="absolute bottom-0 right-0 transform translate-x-1 translate-y-1 
                                     w-6 h-6 bg-white rounded-full flex items-center justify-center 
                                     shadow-lg border border-gray-300 hover:bg-gray-100 transition">
-                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.218A2 2 0 0110.437 3h3.125a2 2 0 011.664.89l.812 1.218a2 2 0 001.664.89H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
+                                <img src="{{ asset('images/icon-camera.png') }}" alt="Ikon Kamera" class="h-5 w-5 object-contain">
                             </a>
                         </div>
                         
                         <h2 class="text-xl font-bold leading-tight">{{ $user->name }}</h2>
                         <p class="text-sm font-light text-gray-200">{{ $user->email }}</p>
                         <p class="text-md font-bold text-[#193053] mt-1">{{ ucfirst($user->role) }}</p>
-
 
                         <div class="mt-5 w-3/4 mx-auto bg-gray-800 bg-opacity-50 p-2 rounded-full border border-gray-700">
                             <span class="tracking-widest text-lg">••••••••••</span>
@@ -75,9 +65,9 @@
                     @if ($user->role === 'student')
                         <div class="space-y-6">
                             @forelse ($courses as $course)
-                                <div class="pb-3 border-b border-gray-300">
+                                <div class="pb-3 border-b border-gray-300 text-[#193053]">
                                     <h3 class="text-lg font-bold">{{ $course->title }}</h3>
-                                    <p class="text-sm text-gray-700">Pengajar: {{ $course->teacher->name }}</p>
+                                    <p class="text-sm">Pengajar: {{ $course->teacher->name }}</p>
 
                                     <div class="mt-2">
                                         <div class="w-full bg-[#CFCFCF] rounded-full h-3">
@@ -96,10 +86,20 @@
                     @if ($user->role === 'teacher')
                         <div class="space-y-6">
                             @forelse ($courses as $course)
-                                <div class="pb-3 border-b border-gray-300">
-                                    <h3 class="text-lg font-bold">{{ $course->title }}</h3>
-                                    <p>Kategori: {{ $course->category->name }}</p>
-                                    <p>**Jumlah Student:** {{ $course->students_count }}</p>
+                                <div class="pb-3 border-b border-gray-300 text-[#193053]">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h3 class="text-lg font-bold">{{ $course->title }}</h3>
+                                            <p class="text-sm">Kategori: {{ $course->category->name }}</p>
+                                            <p class="text-sm">Jumlah Siswa: {{ $course->students_count }}</p>
+                                        </div>
+
+                                        <div class="flex-shrink-0">
+                                            <a href="{{ route('teacher.courses.show', $course->slug) }}"
+                                               class="bg-[#4670A4] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#264069] transition shadow-md">
+                                                Detail Kelas
+                                            </a>
+                                        </div>
                                 </div>
                             @empty
                                 <p class="text-gray-700">Belum membuat kursus apapun.</p>
@@ -110,23 +110,23 @@
                     @if ($user->role === 'admin')
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-white p-4 rounded-xl shadow-md text-center">
-                                <p class="text-3xl font-extrabold text-blue-600">{{ $totalUsers }}</p>
-                                <p class="text-gray-600 text-sm">Total Users</p>
+                                <p class="text-3xl font-extrabold">{{ $totalUsers }}</p>
+                                <p class="text-[#193053] text-sm">Total Pengguna</p>
                             </div>
 
                             <div class="bg-white p-4 rounded-xl shadow-md text-center">
                                 <p class="text-3xl font-extrabold text-green-600">{{ $totalStudents }}</p>
-                                <p class="text-gray-600 text-sm">Students</p>
+                                <p class="text-[#193053] text-sm">Siswa</p>
                             </div>
 
                             <div class="bg-white p-4 rounded-xl shadow-md text-center">
                                 <p class="text-3xl font-extrabold text-yellow-600">{{ $totalTeachers }}</p>
-                                <p class="text-gray-600 text-sm">Teachers</p>
+                                <p class="text-[#193053] text-sm">Guru</p>
                             </div>
 
                             <div class="bg-white p-4 rounded-xl shadow-md text-center">
                                 <p class="text-3xl font-extrabold text-red-600">{{ $totalCourses }}</p>
-                                <p class="text-gray-600 text-sm">Courses</p>
+                                <p class="text-[#193053] text-sm">Kelas</p>
                             </div>
                         </div>
                     @endif
