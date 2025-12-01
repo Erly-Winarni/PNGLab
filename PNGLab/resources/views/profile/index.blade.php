@@ -81,12 +81,17 @@
                                 <p class="text-gray-700">Belum mengikuti kursus apapun.</p>
                             @endforelse
                         </div>
+                        @if ($courses->hasPages())
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    {{ $courses->links() }}
+                                </div>
+                            @endif
                     @endif
 
                     @if ($user->role === 'teacher')
-                        <div class="space-y-6">
+                        <div class="space-y-4 divide-y divide-gray-300"> 
                             @forelse ($courses as $course)
-                                <div class="pb-3 border-b border-gray-300 text-[#193053]">
+                                <div class="pt-4 text-[#193053]"> 
                                     <div class="flex justify-between items-center">
                                         <div>
                                             <h3 class="text-lg font-bold">{{ $course->title }}</h3>
@@ -100,11 +105,17 @@
                                                 Detail Kelas
                                             </a>
                                         </div>
+                                    </div>
                                 </div>
                             @empty
                                 <p class="text-gray-700">Belum membuat kursus apapun.</p>
                             @endforelse
                         </div>
+                        @if ($courses->hasPages())
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                {{ $courses->links() }}
+                            </div>
+                        @endif
                     @endif
 
                     @if ($user->role === 'admin')

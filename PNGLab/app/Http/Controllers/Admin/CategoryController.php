@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; // 🔥 perlu import Str
+use Illuminate\Support\Str; 
 
 class CategoryController extends Controller
 {
@@ -28,7 +28,7 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => $request->name,
-            'slug' => Str::slug($request->name), // 🔥 generate slug
+            'slug' => Str::slug($request->name), 
         ]);
 
         return redirect()->route('admin.categories.index')
@@ -48,7 +48,7 @@ class CategoryController extends Controller
 
         $category->update([
             'name' => $request->name,
-            'slug' => Str::slug($request->name), // 🔥 generate slug
+            'slug' => Str::slug($request->name), 
         ]);
 
         return redirect()->route('admin.categories.index')

@@ -20,7 +20,7 @@ class ProfileController extends Controller
             $data['courses'] = $user->courses()
                 ->where('is_active', 1)
                 ->with(['teacher', 'category']) 
-                ->get();
+                ->paginate(5);
 
             foreach ($data['courses'] as $course) {
                 $totalContents = $course->contents()->count();
@@ -34,12 +34,12 @@ class ProfileController extends Controller
                     : 0;
             }
         }
-        
+
         if ($user->role === 'teacher') {
             $data['courses'] = Course::where('teacher_id', $user->id)
                 ->withCount('students')
                 ->with('category')
-                ->get();
+                ->paginate(3);
         }
 
         if ($user->role === 'admin') {

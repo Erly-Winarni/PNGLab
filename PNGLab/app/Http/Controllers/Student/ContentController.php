@@ -12,8 +12,7 @@ class ContentController extends Controller
     public function complete(Course $course, Content $content)
     {
         $user = auth()->user();
-
-        // Tandai selesai di pivot content_progress
+        
         $user->contentProgress()->syncWithoutDetaching([
             $content->id => [
                 'is_done' => true,
@@ -21,7 +20,6 @@ class ContentController extends Controller
             ]
         ]);
 
-        // Ambil konten berikutnya
         $nextContent = $content->course
             ->contents()
             ->where('order', '>', $content->order)
@@ -41,16 +39,13 @@ class ContentController extends Controller
     {
         $student = auth()->user();
 
-        // Cek apakah konten ini sudah diselesaikan oleh student
         $isCompleted = $content->is_completed;
 
-        // Ambil konten sebelumnya
         $previous = Content::where('course_id', $content->course_id)
             ->where('order', '<', $content->order)
             ->orderBy('order', 'desc')
             ->first();
 
-        // Cek apakah konten sebelumnya sudah selesai
         $previousCompleted = $previous
             ? $previous->completedBy()->where('user_id', $student->id)->exists()
             : true;
@@ -67,7 +62,6 @@ class ContentController extends Controller
     {
         $user = auth()->user();
 
-        // Update pivot is_done => false
         $user->contentProgress()->updateExistingPivot($content->id, [
             'is_done' => false,
             'done_at' => null,

@@ -11,18 +11,12 @@ use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
-    /**
-     * Tampilkan daftar semua kursus (Admin).
-     */
     public function index()
     {
         $courses = Course::with('teacher', 'category')->paginate(20);
         return view('admin.courses.index', compact('courses'));
     }
 
-    /**
-     * Form tambah kursus baru.
-     */
     public function create()
     {
         $categories = Category::all();
@@ -31,9 +25,6 @@ class CourseController extends Controller
         return view('admin.courses.create', compact('categories', 'teachers'));
     }
 
-    /**
-     * Simpan kursus baru.
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -44,6 +35,22 @@ class CourseController extends Controller
             'end_date'     => 'required|date|after_or_equal:start_date',
             'category_id'  => 'nullable|exists:categories,id',
             'max_students' => 'nullable|integer|min:1',
+        ], [
+            'title.required'         => 'Judul wajib diisi.',
+            'title.max'              => 'Judul maksimal 255 karakter.',
+            'title.unique'           => 'Judul sudah digunakan.',
+            'description.required'   => 'Deskripsi wajib diisi.',
+            'teacher_id.required'    => 'Guru wajib dipilih.',
+            'teacher_id.exists'      => 'Guru tidak valid.',
+            'start_date.required'    => 'Tanggal mulai wajib diisi.',
+            'start_date.date'        => 'Tanggal mulai tidak valid.',
+            'end_date.required'      => 'Tanggal selesai wajib diisi.',
+            'end_date.date'          => 'Tanggal selesai tidak valid.',
+            'end_date.after_or_equal'=> 'Tanggal selesai harus sama atau setelah tanggal mulai.',
+            'category_id.exists'     => 'Kategori tidak valid.',
+            'max_students.integer'   => 'Maksimal siswa harus berupa angka.',
+            'max_students.min'       => 'Maksimal siswa minimal 1.',
+            'max_students.required'  => 'Maksimal siswa wajib diisi jika ingin diatur.',
         ]);
 
         $validatedData['slug'] = Str::slug($request->title);
@@ -55,9 +62,6 @@ class CourseController extends Controller
                         ->with('success', 'Kursus baru berhasil dibuat oleh Admin.');
     }
 
-    /**
-     * Form edit kursus.
-     */
     public function edit(Course $course)
     {
         $categories = Category::all();
@@ -70,9 +74,6 @@ class CourseController extends Controller
         ]);
     }
 
-    /**
-     * Update kursus.
-     */
     public function update(Request $request, Course $course)
     {
         $validatedData = $request->validate([
@@ -83,6 +84,22 @@ class CourseController extends Controller
             'end_date'     => 'required|date|after_or_equal:start_date',
             'category_id'  => 'nullable|exists:categories,id',
             'max_students' => 'nullable|integer|min:1',
+        ], [
+            'title.required'         => 'Judul wajib diisi.',
+            'title.max'              => 'Judul maksimal 255 karakter.',
+            'title.unique'           => 'Judul sudah digunakan.',
+            'description.required'   => 'Deskripsi wajib diisi.',
+            'teacher_id.required'    => 'Guru wajib dipilih.',
+            'teacher_id.exists'      => 'Guru tidak valid.',
+            'start_date.required'    => 'Tanggal mulai wajib diisi.',
+            'start_date.date'        => 'Tanggal mulai tidak valid.',
+            'end_date.required'      => 'Tanggal selesai wajib diisi.',
+            'end_date.date'          => 'Tanggal selesai tidak valid.',
+            'end_date.after_or_equal'=> 'Tanggal selesai harus sama atau setelah tanggal mulai.',
+            'category_id.exists'     => 'Kategori tidak valid.',
+            'max_students.integer'   => 'Maksimal siswa harus berupa angka.',
+            'max_students.min'       => 'Maksimal siswa minimal 1.',
+            'max_students.required'  => 'Maksimal siswa wajib diisi jika ingin diatur.',
         ]);
 
         $validatedData['slug'] = Str::slug($validatedData['title']);
@@ -94,9 +111,6 @@ class CourseController extends Controller
                         ->with('success', 'Kursus berhasil diperbarui secara global oleh Admin.');
     }
 
-    /**
-     * Hapus kursus.
-     */
     public function destroy(Course $course)
     {
         $course->delete();
@@ -105,9 +119,6 @@ class CourseController extends Controller
                          ->with('success', 'Kursus berhasil dihapus.');
     }
 
-    /**
-     * Tampilkan detail kursus (opsional jika dibutuhkan).
-     */
     public function show(Course $course)
     {
         return view('admin.courses.show', compact('course'));

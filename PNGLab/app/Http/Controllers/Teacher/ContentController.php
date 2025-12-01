@@ -31,6 +31,17 @@ class ContentController extends Controller
             'media_urls.*' => 'nullable|string',
             'media_files.*' => 'nullable|file|mimes:pdf',
             'order' => 'nullable|integer|min:0',
+        ], [
+            'title.required'       => 'Judul wajib diisi.',
+            'title.string'         => 'Judul harus berupa teks.',
+            'body.string'          => 'Konten harus berupa teks.',
+            'course_id.required'   => 'Kursus wajib dipilih.',
+            'course_id.exists'     => 'Kursus tidak valid.',
+            'media_urls.*.string'  => 'URL media harus berupa teks.',
+            'media_files.*.file'   => 'File media harus berupa file.',
+            'media_files.*.mimes'  => 'File media harus berupa PDF.',
+            'order.integer'        => 'Urutan harus berupa angka.',
+            'order.min'            => 'Urutan minimal 0.',
         ]);
 
         $content = Content::create([
@@ -85,6 +96,17 @@ class ContentController extends Controller
             'media_urls.*' => 'nullable|string',
             'media_files.*' => 'nullable|file|mimes:pdf',
             'order' => 'nullable|integer|min:0',
+        ], [
+            'title.required'       => 'Judul wajib diisi.',
+            'title.string'         => 'Judul harus berupa teks.',
+            'body.string'          => 'Konten harus berupa teks.',
+            'course_id.required'   => 'Kursus wajib dipilih.',
+            'course_id.exists'     => 'Kursus tidak valid.',
+            'media_urls.*.string'  => 'URL media harus berupa teks.',
+            'media_files.*.file'   => 'File media harus berupa file.',
+            'media_files.*.mimes'  => 'File media harus berupa PDF.',
+            'order.integer'        => 'Urutan harus berupa angka.',
+            'order.min'            => 'Urutan minimal 0.',
         ]);
 
         $content->update([

@@ -31,6 +31,15 @@ class CourseController extends Controller
             'start_date'   => 'required|date',
             'end_date'     => 'required|date|after_or_equal:start_date',
             'category_id'  => 'nullable|exists:categories,id',
+        ], [
+            'title.required'        => 'Judul wajib diisi.',
+            'description.required'  => 'Deskripsi wajib diisi.',
+            'start_date.required'   => 'Tanggal mulai wajib diisi.',
+            'start_date.date'       => 'Tanggal mulai tidak valid.',
+            'end_date.required'     => 'Tanggal selesai wajib diisi.',
+            'end_date.date'         => 'Tanggal selesai tidak valid.',
+            'end_date.after_or_equal'=> 'Tanggal selesai harus sama atau setelah tanggal mulai.',
+            'category_id.exists'    => 'Kategori tidak valid.',
         ]);
 
         Course::create([
@@ -73,6 +82,15 @@ class CourseController extends Controller
             'start_date'   => 'required|date',
             'end_date'     => 'required|date|after_or_equal:start_date',
             'category_id'  => 'nullable|exists:categories,id',
+        ], [
+            'title.required'        => 'Judul wajib diisi.',
+            'description.required'  => 'Deskripsi wajib diisi.',
+            'start_date.required'   => 'Tanggal mulai wajib diisi.',
+            'start_date.date'       => 'Tanggal mulai tidak valid.',
+            'end_date.required'     => 'Tanggal selesai wajib diisi.',
+            'end_date.date'         => 'Tanggal selesai tidak valid.',
+            'end_date.after_or_equal'=> 'Tanggal selesai harus sama atau setelah tanggal mulai.',
+            'category_id.exists'    => 'Kategori tidak valid.',
         ]);
 
         $course->update([

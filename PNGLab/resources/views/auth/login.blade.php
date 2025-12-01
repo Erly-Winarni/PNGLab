@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center bg-[#20232a] p-4 relative overflow-hidden">
+    <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
         <img src="{{ asset('images/surat-depan.png') }}" class="absolute inset-0 w-full h-full top-2 object-contain pointer-events-none z-20">
 
         <div class="relative z-10 w-full max-w-md bg-gradient-to-br from-[#446AA6] to-[#5ED68A] rounded-2xl shadow-xl px-6 pt-16 pb-44">

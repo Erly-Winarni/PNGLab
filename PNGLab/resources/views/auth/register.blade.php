@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center bg-[#20232a] p-4 pt-16 relative overflow-hidden">
+    <div class="min-h-screen flex items-center justify-center p-4 pt-16 relative overflow-hidden">
         <img src="{{ asset('images/surat-depan.png') }}" class="absolute inset-0 w-full h-full top-56 object-contain pointer-events-none z-20">
 
         <div class="relative z-10 w-full max-w-md bg-gradient-to-br from-[#446AA6] to-[#5ED68A] rounded-2xl shadow-xl px-6 pt-16 pb-36">
@@ -49,12 +49,20 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block font-semibold text-white">Foto Profil (opsional)</label>
+                    <label class="block font-semibold text-white mb-2">Foto Profil (opsional)</label>
+                    
                     <input type="file" name="avatar"
-                           class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white">
-                    <p class="text-xs text-gray-600 mt-1">Maks 2MB. Format: jpg, png.</p>
+                            class="mt-1 w-full text-sm text-[#264069] 
+                                   file:mr-4 file:py-2 file:px-4 
+                                   file:rounded-full file:border-0
+                                   file:text-sm file:font-semibold
+                                   file:bg-[#446AA6] file:text-white 
+                                   hover:file:bg-[#264069] transition"
+                                   >
+                                   
+                    <p class="text-xs text-white mt-1">Maks 2MB. Format: jpg, png.</p>
                     @error('avatar')
-                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-300 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
