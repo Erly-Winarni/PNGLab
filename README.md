@@ -31,7 +31,7 @@ PNGLab adalah platform kursus  yang berfokus pada pelatihan mendalam di bidang *
 - Laravel 10
 
 ## Panduan Lengkap Instalasi PNGLab di XAMPP
-### 1. Kloning Repositori
+## 1. Kloning Repositori
 #### 1. Buka terminal (CMD / PowerShell / Git Bash)
 #### 2. Masuk ke folder `htdocs` XAMPP:
 ```bash
@@ -63,7 +63,7 @@ php artisan breeze:install
 ```bash
 npm run dev
 ```
-### 3. Buat Database
+## 3. Buat Database
 #### 1.Jalankan migration untuk membuat database dan tabelnya:
 ```bash
 php artisan migrate
@@ -72,7 +72,7 @@ php artisan migrate
 ```bash
 php artisan db:seed
 ```
-### 4. Nyalakan Server Lokal
+## 4. Nyalakan Server Lokal
 #### 1.Start Apache dan MySQL di XAMPP Control Panel
 #### 2.Jalankan Laravel server:
 ```bash
@@ -82,7 +82,7 @@ php artisan serve
 ```bash
 http://127.0.0.1:8000
 ```
-### 5. Login Awal
+## 5. Login Awal
 #### 1.Gunakan akun yang dibuat melalui seeder atau register di halaman login
 #### 2.Admin dapat langsung login untuk mengelola pengguna, course/kelas, kategori dan konten
 
