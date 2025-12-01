@@ -22,7 +22,7 @@
                 </div>
                 
                 <div class="md:hidden">
-                    {{-- @include('layouts.navigation-bottom')  --}}
+                    {{-- @include('components.navigation-bottom')  --}}
                 </div>
             </div>
         </body>

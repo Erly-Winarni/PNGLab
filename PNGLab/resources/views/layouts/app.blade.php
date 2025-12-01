@@ -14,7 +14,7 @@
             <div class="flex min-h-screen"> 
             
                 <div class="hidden md:flex flex-shrink-0">
-                    @include('layouts.navigation-desktop') 
+                    @include('components.navigation-desktop') 
                 </div>
 
                 <div class="flex flex-col flex-1 overflow-y-auto"> 
@@ -26,7 +26,7 @@
                 </div>
                 
                 <div class="md:hidden">
-                    @include('layouts.navigation-bottom') 
+                    @include('components.navigation-bottom') 
                 </div>
             </div>
         </body>

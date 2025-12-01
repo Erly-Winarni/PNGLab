@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Models\Course;
 use App\Models\Category;
 
@@ -50,24 +51,21 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('dashboard/admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
-
+        Route::get('/', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
         Route::resource('courses', AdminCourseController::class); 
-
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-
         Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-
         Route::resource('contents', \App\Http\Controllers\Admin\ContentController::class);
 
-        Route::get('/contents/{content}/media', [AdminContentController::class, 'manageMedia']
-            )->name('contents.media.index');
+        Route::get('/courses/{course:slug}', [AdminCourseController::class, 'show'])
+            ->name('courses.show');
 
-        Route::delete('/contents/{media}/delete-media', [AdminContentController::class, 'deleteMedia']
-            )->name('contents.media.delete');
+        Route::get('/contents/{content}/media', [AdminContentController::class, 'manageMedia'])
+            ->name('contents.media.index');
 
+        Route::delete('/contents/{media}/delete-media', [AdminContentController::class, 'deleteMedia'])
+            ->name('contents.media.delete');
     });
 
 Route::middleware(['auth', 'role:teacher'])

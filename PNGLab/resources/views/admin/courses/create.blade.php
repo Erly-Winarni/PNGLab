@@ -10,10 +10,6 @@
             @csrf
 
             @include('admin.courses.form', ['categories' => $categories, 'teachers' => $teachers])
-
-            <button class="bg-green-600 text-white px-4 py-2 rounded mt-4">
-                Buat Kursus
-            </button>
         </form>
     </div>
 </x-app-layout>

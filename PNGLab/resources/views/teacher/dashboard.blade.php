@@ -77,16 +77,15 @@
 
                 <div class="bg-white p-6 rounded-xl shadow-xl">
                     <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
-                        <h3 class="text-2xl font-bold text-[#193053]">Course Anda</h3>
+                        <h3 class="text-2xl font-bold text-[#193053]">Kelas Anda</h3>
                         <a href="{{ route('teacher.courses.create') }}" 
                             class="bg-[#446AA6] text-white px-4 py-2 rounded-full font-semibold hover:bg-[#264069] transition flex items-center text-sm">
-                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                            Buat Baru
+                            + Buat Baru
                         </a>
                     </div>
 
                     @if ($courses->count() == 0)
-                        <p class="text-gray-500 py-4">Anda belum membuat course apapun. Klik tombol di atas untuk memulai!</p>
+                        <p class="text-gray-500 py-4">Anda belum membuat Kelas apapun. Klik tombol di atas untuk memulai!</p>
                     @else
                         <div class="space-y-4">
                             @foreach ($courses as $course)

@@ -8,8 +8,6 @@
             @csrf
 
             @include('admin.categories.form')
-
-            <button class="bg-green-600 text-white px-4 py-2 rounded mt-4">Simpan</button>
         </form>
     </div>
 </x-app-layout>

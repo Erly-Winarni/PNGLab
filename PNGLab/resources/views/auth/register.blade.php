@@ -94,7 +94,7 @@
 
             <p class="text-center mt-4 text-sm text-white">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-[#264069] font-semibold hover:underline">
+                <a href="{{ route('login') }}" class=" text-white hover:text-[#264069] font-semibold hover:underline">
                     Masuk
                 </a>
             </p>

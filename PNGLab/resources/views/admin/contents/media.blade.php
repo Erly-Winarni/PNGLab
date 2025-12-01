@@ -1,38 +1,49 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Kelola Media: {{ $content->title }}
-        </h2>
-    </x-slot>
+    <div x-data="{ showModal: false, formAction: '' }" class="py-10">
 
-    <div class="p-6">
-
-        @foreach ($content->media as $m)
-            <div class="flex justify-between items-center mb-3 p-2 border rounded">
-
-                <div>
-                    <strong>{{ strtoupper($m->type) }}</strong> —
-                    {{ $m->value }}
-                </div>
-
-                <form action="{{ route('admin.contents.media.delete', $m->id) }}"
-                      method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button class="bg-red-600 text-white px-3 py-1 rounded">
-                        Hapus
-                    </button>
-                </form>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start mb-6 border-b border-gray-200 pb-3">
+                
+                <a href="{{ route('admin.contents.edit', $content->id) }}"
+                   class="text-gray-600 hover:text-[#446AA6] transition flex items-center text-xl font-semibold">
+                    &lt; Kembali
+                </a>
             </div>
-        @endforeach
 
-        @if($content->media->count() === 0)
-            <p class="text-gray-500">Tidak ada media.</p>
-        @endif
+            <div class="bg-white shadow-xl rounded-2xl p-6 border border-gray-100">
+                
+                <h3 class="text-xl font-bold text-[#193053] mb-6 border-b border-gray-200 pb-3">
+                    Media untuk: <span class="font-bold text-[#193053]">{{ $content->title }}</span>
+                </h3>
 
-        <a href="{{ route('admin.contents.edit', $content->id) }}"
-           class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded">
-            Kembali ke Edit Materi
-        </a>
+                @forelse ($content->media as $m)
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 p-4 rounded-xl border border-gray-200 bg-gray-50 shadow-sm">
+
+                        <div class="mb-2 sm:mb-0 max-w-full truncate">
+                            <span class="px-4 py-0.5 text-xs font-bold rounded-full uppercase mr-2 
+                                {{ $m->type === 'youtube' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' }}">
+                                {{ strtoupper($m->type) }}
+                            </span>
+                            <span class="text-sm text-gray-700 break-words">{{ Str::limit($m->value, 80) }}</span>
+                        </div>
+
+                        <button
+                            type="button"
+                            @click="showModal = true; formAction = '{{ route('admin.contents.media.delete', $m->id) }}';"
+                            class="text-sm font-medium bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition shadow-md flex-shrink-0 flex items-center">
+                            Hapus
+                        </button>
+                    </div>
+                @empty
+                    <div class="p-4 bg-gray-50 rounded-xl">
+                        <p class="text-gray-500">Tidak ada media yang terkait dengan materi ini.</p>
+                    </div>
+                @endforelse
+
+            </div>
+        </div>
+        
+        <x-delete-modal/> 
+
     </div>
 </x-app-layout>

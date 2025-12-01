@@ -10,9 +10,6 @@
 
             @include('admin.users.form')
 
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded mt-4">
-                Update User
-            </button>
         </form>
     </div>
 </x-app-layout>

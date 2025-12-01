@@ -1,5 +1,4 @@
 <x-guest-layout>
-    
     <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md mx-auto">
         
         <h1 class="text-2xl font-extrabold text-[#193053] mb-6 text-center">Atur Ulang Kata Sandi</h1>
@@ -58,7 +57,6 @@
             <div class="flex items-center justify-center mt-4">
                 <button type="submit" class="w-full bg-[#446AA6] text-white px-5 py-3 rounded-full font-bold hover:bg-[#264069] transition shadow-md flex items-center justify-center">
                     Atur Ulang Kata Sandi
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </button>
             </div>
         </form>
