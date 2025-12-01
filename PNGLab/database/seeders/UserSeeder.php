@@ -10,7 +10,6 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin
         User::create([
             'name' => 'Super Admin',
             'email' => 'admin@pnglab.com',
@@ -19,7 +18,6 @@ class UserSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Teachers
         User::create([
             'name' => 'Teacher One',
             'email' => 'teacher1@pnglab.com',
@@ -36,7 +34,6 @@ class UserSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Students
         User::create([
             'name' => 'Student One',
             'email' => 'student1@pnglab.com',

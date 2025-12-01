@@ -33,21 +33,23 @@ class Content extends Model {
         return $this->belongsTo(User::class, 'teacher_id');
     }
 
+    public function media()
+    {
+        return $this->hasMany(ContentMedia::class);
+    }
+
     public function getYoutubeId()
     {
         $url = $this->media_url;
 
-        // youtu.be short link
         if (preg_match('/youtu\.be\/([^\?]+)/', $url, $m)) {
             return $m[1];
         }
 
-        // youtube.com/watch?v=
         if (preg_match('/v=([^&]+)/', $url, $m)) {
             return $m[1];
         }
 
-        // embed links
         if (preg_match('/embed\/([^?]+)/', $url, $m)) {
             return $m[1];
         }

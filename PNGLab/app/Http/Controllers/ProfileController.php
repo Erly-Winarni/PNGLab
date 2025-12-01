@@ -18,6 +18,7 @@ class ProfileController extends Controller
 
         if ($user->role === 'student') {
             $data['courses'] = $user->courses()
+                ->where('is_active', 1)
                 ->with(['contents', 'teacher'])
                 ->get();
 
@@ -97,10 +98,9 @@ class ProfileController extends Controller
         $request->validate([
             'current_password' => 'required',
             'password' => [
-                'required',
-                'confirmed',
-                'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
             ],
         ], [
             'current_password.required' => 'Password lama harus diisi.',

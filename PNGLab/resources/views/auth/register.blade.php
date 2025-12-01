@@ -24,32 +24,37 @@
             <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                 @csrf
 
-                {{-- Nama --}}
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-800">Nama Lengkap</label>
                     <input type="text" name="name"
-                           class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
-                           required value="{{ old('name') }}">
+                        class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
+                        value="{{ old('name') }}">
+                    @error('name')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                {{-- Email --}}
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-800">Email</label>
                     <input type="email" name="email"
-                           class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
-                           required value="{{ old('email') }}">
+                        class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
+                        value="{{ old('email') }}">
+                    @error('email')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                {{-- Role --}}
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-800">Daftar Sebagai</label>
                     <select name="role"
-                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
-                            required>
+                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white">
                         <option value="">-- Pilih Role --</option>
-                        <option value="student">Siswa</option>
-                        <option value="teacher">Guru</option>
+                        <option value="student" {{ old('role')=='student'?'selected':'' }}>Siswa</option>
+                        <option value="teacher" {{ old('role')=='teacher'?'selected':'' }}>Guru</option>
                     </select>
+                    @error('role')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Avatar --}}
@@ -58,6 +63,9 @@
                     <input type="file" name="avatar"
                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white">
                     <p class="text-xs text-gray-600 mt-1">Maks 2MB. Format: jpg, png.</p>
+                    @error('avatar')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Password --}}
@@ -66,6 +74,9 @@
                     <input type="password" name="password"
                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
                            required>
+                    @error('password')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Konfirmasi Password --}}
@@ -74,6 +85,9 @@
                     <input type="password" name="password_confirmation"
                            class="mt-1 w-full border border-gray-300 rounded-lg p-2 bg-white"
                            required>
+                    @error('password')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Tombol Submit --}}

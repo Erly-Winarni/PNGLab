@@ -49,7 +49,6 @@
                 <div class="mt-4">
                     {{ $contents->links() }}
                 </div>
-
             </div>
         </div>
     </div>

@@ -83,9 +83,6 @@ class UserController extends Controller
                          ->with('success', 'User berhasil diperbarui.');
     }
 
-    /**
-     * Hapus user
-     */
     public function destroy(User $user)
     {
         $user->delete();

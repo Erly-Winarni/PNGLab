@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="p-6">
-        <form action="{{ route('admin.contents.store') }}" method="POST">
+        <form action="{{ route('admin.contents.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             @include('admin.contents.form')

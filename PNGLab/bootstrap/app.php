@@ -14,7 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'role' => RoleMiddleware::class,
+            'redirect.logout' => \App\Http\Middleware\RedirectIfLoggedOut::class,
         ]);
+    
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

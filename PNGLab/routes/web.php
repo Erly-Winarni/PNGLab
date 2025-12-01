@@ -8,32 +8,17 @@ use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController; 
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\Student\ContentController as StudentContentController;
+use App\Http\Controllers\Teacher\ContentController as TeacherContentController;
+use App\Http\Controllers\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Models\Course;
 use App\Models\Category;
 
-/*
-|--------------------------------------------------------------------------
-| Public Homepage
-|--------------------------------------------------------------------------
-*/
-Route::get('/', function () {
-    return view('welcome', [
-        'popularCourses' => Course::latest()->take(6)->get(),
-        'categories' => Category::all(),
-    ]);
-})->name('home');
 
-/*
-|--------------------------------------------------------------------------
-| Dashboard
-|--------------------------------------------------------------------------
-*/
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [PublicCourseController::class, 'index'])->name('home');
+
 Route::get('/dashboard', function () {
     $user = auth()->user();
     if ($user->role === 'admin') return redirect()->route('admin.dashboard');
@@ -43,19 +28,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 
-/*
-|--------------------------------------------------------------------------
-| Profile
-|--------------------------------------------------------------------------
-*/
-
 Route::middleware('auth')->group(function () {
 
-    // Profile Index
     Route::get('/profile', [ProfileController::class, 'index'])
         ->name('profile.index');
 
-    // Profile Edit
     Route::get('/profile/edit', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -69,11 +46,6 @@ Route::middleware('auth')->group(function () {
         ->name('profile.password.update');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Admin
-|--------------------------------------------------------------------------
-*/
 Route::middleware(['auth', 'role:admin'])
     ->prefix('dashboard/admin')
     ->name('admin.')
@@ -89,12 +61,15 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
 
         Route::resource('contents', \App\Http\Controllers\Admin\ContentController::class);
+
+        Route::get('/contents/{content}/media', [AdminContentController::class, 'manageMedia']
+            )->name('contents.media.index');
+
+        Route::delete('/contents/{media}/delete-media', [AdminContentController::class, 'deleteMedia']
+            )->name('contents.media.delete');
+
     });
-/*
-|--------------------------------------------------------------------------
-| Teacher
-|--------------------------------------------------------------------------
-*/
+
 Route::middleware(['auth', 'role:teacher'])
     ->prefix('dashboard/teacher')
     ->name('teacher.')
@@ -106,13 +81,12 @@ Route::middleware(['auth', 'role:teacher'])
         Route::resource('courses', TeacherCourseController::class);
 
         Route::resource('contents', \App\Http\Controllers\Teacher\ContentController::class);
+
+        Route::delete('/media/{id}', [TeacherContentController::class, 'deleteMedia'])
+            ->name('media.delete');
     });
 
-/*
-|--------------------------------------------------------------------------
-| Student
-|--------------------------------------------------------------------------
-*/
+
 Route::middleware(['auth', 'role:student'])
     ->prefix('dashboard/student')
     ->name('student.')
@@ -142,22 +116,5 @@ Route::middleware(['auth', 'role:student'])
             [StudentContentController::class, 'uncomplete'])
             ->name('contents.uncomplete');
     });
-
-
-/*
-|--------------------------------------------------------------------------
-| Categories (Admin/general)
-|--------------------------------------------------------------------------
-*/
-Route::resource('categories', CategoryController::class);
-
-/*
-|--------------------------------------------------------------------------
-| PUBLIC COURSE DETAIL (pakai slug)
-|--------------------------------------------------------------------------
-*/
-// 🔥 Gunakan PublicCourseController yang baru
-Route::get('/courses/{slug}', [PublicCourseController::class, 'show']) 
-    ->name('public.courses.show');
 
 require __DIR__.'/auth.php';

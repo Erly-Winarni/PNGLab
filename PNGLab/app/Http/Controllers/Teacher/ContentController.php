@@ -27,41 +27,49 @@ class ContentController extends Controller
             'title' => 'required|string',
             'body' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
-            'media_url' => 'nullable|string',
-            'media_file' => 'nullable|file|mimes:pdf,doc,docx',
-            'order' => 'nullable|integer|min:0',
+
+            // multiple URL
+            'media_urls.*' => 'nullable|string',
+
+            // multiple PDF
+            'media_files.*' => 'nullable|file|mimes:pdf',
         ]);
 
-        $mediaPath = null;
-        $mediaType = null;
-
-        // Jika upload file
-        if ($request->hasFile('media_file')) {
-            $mediaPath = $request->file('media_file')->store('media', 'public');
-            $ext = $request->file('media_file')->getClientOriginalExtension();
-
-            if ($ext == 'pdf') $mediaType = 'pdf';
-            if ($ext == 'doc' || $ext == 'docx') $mediaType = 'doc';
-        }
-        // Jika input URL
-        else if ($request->media_url) {
-            $mediaType = $this->detectMediaType($request->media_url);
-        }
-
-        Content::create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'course_id' => $request->course_id,
+        $content = Content::create([
+            'title'      => $request->title,
+            'body'       => $request->body,
+            'course_id'  => $request->course_id,
             'teacher_id' => auth()->id(),
-            'media_url' => $request->media_url,
-            'media_path' => $mediaPath,
-            'media_type' => $mediaType,
-            'order' => $request->order ?? 0,
+            'order'      => $request->order ?? 0,
         ]);
+
+        /* ====== SIMPAN URL ====== */
+        if ($request->media_urls) {
+            foreach ($request->media_urls as $url) {
+                if ($url) {
+                    $content->media()->create([
+                        'type'  => $this->detectUrlType($url),
+                        'value' => $url,
+                    ]);
+                }
+            }
+        }
+
+        /* ====== SIMPAN FILE PDF MULTIPLE ====== */
+        if ($request->hasFile('media_files')) {
+            foreach ($request->media_files as $file) {
+                $path = $file->store('media', 'public');
+
+                $content->media()->create([
+                    'type'  => 'pdf',
+                    'value' => $path,
+                ]);
+            }
+        }
 
         return redirect()
             ->route('teacher.contents.index')
-            ->with('success','Materi berhasil dibuat.');
+            ->with('success', 'Materi berhasil dibuat');
     }
 
 
@@ -76,58 +84,66 @@ class ContentController extends Controller
     public function update(Request $request, Content $content)
     {
         $request->validate([
-            'title' => 'required',
-            'body'  => 'required',
+            'title' => 'required|string',
+            'body' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
-            'media_url' => 'nullable|string',
-            'media_file' => 'nullable|file|mimes:pdf,doc,docx|max:5048',
             'order' => 'required|integer',
+
+            // multiple URL
+            'media_urls.*' => 'nullable|string',
+
+            // multiple PDF
+            'media_files.*' => 'nullable|file|mimes:pdf',
         ]);
-
-        $mediaType = null;
-        $mediaPath = $content->media_path;
-        $mediaUrl  = $content->media_url;
-
-        // Detect URL
-        if ($request->media_url) {
-            [$mediaType, $mediaUrl] = $this->detectUrlType($request->media_url);
-        }
-
-        // Upload file baru
-        if ($request->hasFile('media_file')) {
-
-            // Hapus file lama jika ada
-            if ($content->media_path && \Storage::disk('public')->exists($content->media_path)) {
-                \Storage::disk('public')->delete($content->media_path);
-            }
-
-            $file = $request->file('media_file');
-            $mediaPath = $file->store('contents', 'public');
-
-            // Tentukan tipe
-            $ext = $file->getClientOriginalExtension();
-
-            if ($ext === 'pdf') $mediaType = 'file_pdf';
-            elseif ($ext === 'doc') $mediaType = 'file_doc';
-            elseif ($ext === 'docx') $mediaType = 'file_docx';
-        }
 
         $content->update([
-            'title'      => $request->title,
-            'body'       => $request->body,
-            'course_id'  => $request->course_id,
-            'media_url'  => $mediaUrl,
-            'media_path' => $mediaPath,
-            'media_type' => $mediaType,
-            'order'      => $request->order,
+            'title' => $request->title,
+            'body'  => $request->body,
+            'course_id' => $request->course_id,
+            'order' => $request->order,
         ]);
 
-        return redirect()
-            ->route('teacher.contents.index')
-            ->with('success', 'Materi berhasil diperbarui!');
+        /* Tambah URL baru */
+        if ($request->media_urls) {
+            foreach ($request->media_urls as $url) {
+                if ($url) {
+                    $content->media()->create([
+                        'type'  => $this->detectUrlType($url),
+                        'value' => $url,
+                    ]);
+                }
+            }
+        }
+
+        /* Tambah PDF baru */
+        if ($request->hasFile('media_files')) {
+            foreach ($request->media_files as $file) {
+                $path = $file->store('media', 'public');
+                $content->media()->create([
+                    'type'  => 'pdf',
+                    'value' => $path,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Materi berhasil diperbarui!');
     }
 
 
+    public function deleteMedia($id)
+    {
+        $media = \App\Models\ContentMedia::findOrFail($id);
+
+        if ($media->type === 'pdf_file') {
+            if (\Storage::disk('public')->exists($media->value)) {
+                \Storage::disk('public')->delete($media->value);
+            }
+        }
+
+        $media->delete();
+
+        return back()->with('success', 'Media berhasil dihapus.');
+    }
 
     public function destroy(Content $content)
     {
@@ -151,16 +167,6 @@ class ContentController extends Controller
         // PDF
         if (str_ends_with($url, '.pdf')) {
             return 'pdf';
-        }
-
-        // DOC
-        if (str_ends_with($url, '.doc')) {
-            return 'doc';
-        }
-
-        // DOCX
-        if (str_ends_with($url, '.docx')) {
-            return 'docx';
         }
 
         return null;

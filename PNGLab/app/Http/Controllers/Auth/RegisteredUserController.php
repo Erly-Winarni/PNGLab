@@ -34,7 +34,6 @@ class RegisteredUserController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[a-z]/',
                 'regex:/[0-9]/',
-                'regex:/[@$!%*#?&]/',
             ],
             'role'      => ['required', 'in:student,teacher'],
             'avatar'    => ['nullable', 'image', 'max:2048'],

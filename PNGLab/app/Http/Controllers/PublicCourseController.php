@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Models\Course;
+use App\Models\Category;
 
 class PublicCourseController extends Controller
 {
-    // 🔥 Pindahkan logika tampil kursus publik ke sini
-    public function show($slug)
+    public function index()
     {
-        // Tetap menggunakan firstOrFail() untuk melempar 404 jika slug tidak ditemukan
-        $course = Course::where('slug', $slug)->firstOrFail(); 
-        return view('courses.show', compact('course'));
+        $topCourses = Course::withCount('students')
+            ->where('is_active', 1)
+            ->orderBy('students_count', 'desc')
+            ->take(5)
+            ->get();
+
+        $categories = Category::all();
+
+        return view('public.index', compact('topCourses', 'categories'));
     }
-    
-    // Anda juga bisa menambahkan method index() untuk menampilkan katalog semua kursus
-    // public function index() { ... }
+
 }

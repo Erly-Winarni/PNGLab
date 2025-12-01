@@ -21,7 +21,9 @@ class LoginRequest extends FormRequest
             'password' => [
                 'required',
                 'string',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
             ],
         ];
     }

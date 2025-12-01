@@ -8,7 +8,9 @@
     <div class="p-6">
         <form action="{{ route('teacher.contents.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
             @include('teacher.contents.form')
+
         </form>
 
     </div>
