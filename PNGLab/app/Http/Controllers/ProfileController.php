@@ -5,34 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Course;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-
-        $data = [
-            'user' => $user,
-        ];
+        $data = ['user' => $user];
 
         if ($user->role === 'student') {
-            $data['courses'] = $user->courses()
-                ->where('is_active', 1)
-                ->with(['teacher', 'category']) 
+
+            $courses = $user->courses()
+                ->with([
+                    'teacher',
+                    'category',
+                    'contents',
+                    'contents.completedBy' => fn($q) => $q->where('user_id', $user->id)
+                ])
                 ->paginate(5);
 
-            foreach ($data['courses'] as $course) {
-                $totalContents = $course->contents()->count();
+            foreach ($courses as $course) {
+                $total = $course->contents->count();
 
-                $completed = $course->contents()
-                    ->whereHas('completedBy', fn($q) => $q->where('user_id', $user->id))
+                $completed = $course->contents
+                    ->filter(fn($c) => $c->completedBy->isNotEmpty())
                     ->count();
 
-                $course->progress = $totalContents > 0
-                    ? round(($completed / $totalContents) * 100)
+                $course->progress = $total > 0
+                    ? round(($completed / $total) * 100)
                     : 0;
             }
+
+            $data['courses'] = $courses;
         }
 
         if ($user->role === 'teacher') {
@@ -43,14 +48,15 @@ class ProfileController extends Controller
         }
 
         if ($user->role === 'admin') {
-            $data['totalUsers'] = \App\Models\User::count();
-            $data['totalStudents'] = \App\Models\User::where('role', 'student')->count();
-            $data['totalTeachers'] = \App\Models\User::where('role', 'teacher')->count();
-            $data['totalCourses'] = \App\Models\Course::count();
+            $data['totalUsers'] = User::count();
+            $data['totalStudents'] = User::where('role', 'student')->count();
+            $data['totalTeachers'] = User::where('role', 'teacher')->count();
+            $data['totalCourses'] = Course::count();
         }
 
         return view('profile.index', $data);
     }
+
 
     public function edit()
     {

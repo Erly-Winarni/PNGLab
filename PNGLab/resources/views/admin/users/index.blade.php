@@ -25,7 +25,7 @@
                     <tbody>
                         @forelse ($users as $user)
                             <tr class="hover:bg-gray-50 transition border-t border-gray-100">
-                                <td class="px-6 py-4 text-sm font-medium text-[#193053] whitespace-nowrap">{{ $user->name }}</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-[#446AA6] whitespace-nowrap">{{ $user->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600 hidden sm:table-cell">{{ $user->email }}</td>
                                 <td class="px-6 py-4">
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full uppercase

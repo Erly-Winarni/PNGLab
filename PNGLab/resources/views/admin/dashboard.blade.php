@@ -76,41 +76,41 @@
             
             <aside class="w-full md:w-80 flex-shrink-0 p-6 md:pr-0 overflow-y-auto order-1 md:order-2">
                 <div class="bg-white p-6 rounded-xl shadow-xl">
-                    <h3 class="text-2xl font-bold text-[#193053] mb-4 border-b border-gray-200 pb-3">Akses Administrasi</h3>
+                    <h3 class="text-2xl font-bold text-[#193053] mb-4 border-b border-gray-200 pb-3">Aksi Cepat</h3>
                     
                     <div class="grid grid-cols-1 gap-4">
-                        <a href="{{ route('admin.categories.index') }}" 
+                        <a href="{{ route('admin.categories.create') }}" 
                            class="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#48C264] transition duration-300 flex items-center shadow-md">
                             <img src="{{ asset('images/icon-category-green.png') }}" alt="Ikon Buku" class="h-7 w-7 object-contain mr-5">
                             <div>
-                                <h3 class="font-bold text-lg text-[#193053]">Kelola Kategori</h3>
+                                <h3 class="font-bold text-lg text-[#193053]">Tambah Kategori</h3>
                                 <p class="text-sm text-gray-500">Buat, edit, atau hapus kategori.</p>
                             </div>
                         </a>
 
-                        <a href="{{ route('admin.courses.index') }}" 
+                        <a href="{{ route('admin.courses.create') }}" 
                            class="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#da5353] transition duration-300 flex items-center shadow-md">
                             <img src="{{ asset('images/icon-course-red.png') }}" alt="Ikon Buku" class="h-7 w-7 object-contain mr-5">
                             <div>
-                                <h3 class="font-bold text-lg text-[#193053]">Kelola Kelas</h3>
+                                <h3 class="font-bold text-lg text-[#193053]">Tambah Kelas</h3>
                                 <p class="text-sm text-gray-500">Edit, publikasikan, atau arsipkan.</p>
                             </div>
                         </a>
 
-                        <a href="{{ route('admin.users.index') }}" 
+                        <a href="{{ route('admin.users.create') }}" 
                            class="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#446AA6] transition duration-300 flex items-center shadow-md">
                             <img src="{{ asset('images/icon-user-biru.png') }}" alt="Ikon User" class="h-7 w-7 object-contain mr-5">
                             <div>
-                                <h3 class="font-bold text-lg text-[#193053]">Kelola Pengguna</h3>
+                                <h3 class="font-bold text-lg text-[#193053]">Tambah Pengguna</h3>
                                 <p class="text-sm text-gray-500">Atur peran (Admin/Teacher/Student).</p>
                             </div>
                         </a>
                         
-                        <a href="{{ route('admin.contents.index') }}" 
+                        <a href="{{ route('admin.contents.create') }}" 
                            class="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#F4A03E] transition duration-300 flex items-center shadow-md">
                             <img src="{{ asset('images/icon-book-orange.png') }}" alt="Ikon Buku" class="h-7 w-7 object-contain mr-5">
                             <div>
-                                <h3 class="font-bold text-lg text-[#193053]">Kelola Materi</h3>
+                                <h3 class="font-bold text-lg text-[#193053]">Tambah Materi</h3>
                                 <p class="text-sm text-gray-500">Atur seluruh konten dan aset kelas.</p>
                             </div>
                         </a>

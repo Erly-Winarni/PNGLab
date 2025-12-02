@@ -4,14 +4,79 @@
             <h1 class="text-3xl font-extrabold mt-2 text-[#193053]">{{ $content->title }}</h1>
         </div>
 
+        <div class="flex justify-between items-center gap-4 mt-8">
+            <a href="{{ route('student.courses.show', $content->course->slug) }}"
+                class="flex items-center px-6 py-3 bg-gray-200 text-[#193053] rounded-full font-semibold hover:bg-gray-300 transition">
+                < Daftar Isi
+            </a>
+
+            @php
+                $nextContent = $content->course->contents()
+                    ->where('order', '>', $content->order)
+                    ->orderBy('order', 'asc')
+                    ->first();
+            @endphp
+
+            @if ($previousCompleted && $nextContent)
+                <a href="{{ route('student.contents.show', [$content->course->slug, $nextContent->id]) }}"
+                    class="flex items-center px-6 py-3 bg-[#446AA6] text-white rounded-full font-bold hover:bg-[#264069] transition">
+                    Lanjut Materi >
+                </a>
+            @else
+                <button disabled class="px-6 py-3 bg-gray-400 text-white rounded-full font-bold cursor-not-allowed opacity-70">
+                    Lanjut Materi >
+                </button>
+            @endif
+
+        </div>
+
+        <div class="mt-6">
+            @php
+                $isCompleted = auth()->user()
+                    ->contentProgress()
+                    ->where('content_id', $content->id)
+                    ->where('is_done', true)
+                    ->exists();
+            @endphp
+
+            <div class="flex items-center mb-5">
+                @if (!$isCompleted)
+                    <form method="POST"
+                        action="{{ route('student.contents.complete', [$content->course->slug, $content->id]) }}">
+                        @csrf
+                        <button class="flex items-center gap-2 px-4 py-3 bg-[#446AA6] text-white font-semibold rounded-full text-md hover:bg-[#264069] transition shadow-md">
+                            <span>Selesai</span>
+                        </button>
+                    </form>
+                @else
+                    <form method="POST"
+                        action="{{ route('student.contents.uncomplete', [$content->course->slug, $content->id]) }}">
+                        @csrf
+                        <button class="flex items-center gap-2 px-4 py-3 bg-[#F4A03E] text-white font-semibold rounded-full text-md hover:bg-yellow-600 transition shadow-md">
+                            <span>Selesai (Tandai Batal)</span>
+                        </button>
+                    </form>
+                @endif
+            </div>
+        </div>
+
         @if (!$previousCompleted)
-            <div class="flex items-center p-4 mb-6 bg-red-100 text-red-700 border-l-4 border-red-500 rounded-lg shadow-sm">
-                <img src="{{ asset('images/icon-warning.png') }}" alt="Ikon Warning" class="h-6 w-6 object-contain">
-                <p class="font-medium">Selesaikan materi sebelumnya terlebih dahulu.</p>
+            <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+                <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-lg text-center">
+                    <img src="{{ asset('images/icon-warning.png') }}" class="mx-auto mb-4 w-16">
+                    <h2 class="text-2xl font-bold text-red-600 mb-4">Akses Terkunci</h2>
+                    <p class="text-lg text-gray-700">
+                        Selesaikan materi sebelumnya terlebih dahulu untuk membuka materi ini.
+                    </p>
+                    <a href="{{ route('student.courses.show', $content->course->slug) }}"
+                    class="mt-6 inline-block bg-[#446AA6] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#264069] transition">
+                        Kembali ke Daftar Isi
+                    </a>
+                </div>
             </div>
         @endif
 
-        <div class="bg-white p-6 rounded-2xl shadow-xl space-y-6">
+        <div class="bg-white p-6 rounded-2xl shadow-xl space-y-6 {{ !$previousCompleted ? 'blur-sm pointer-events-none select-none opacity-30' : '' }}">
             <div class="prose max-w-none text-[#193053]">
                 {!! nl2br(e($content->body)) !!}
             </div>
@@ -52,37 +117,8 @@
                             </div>
                         @endif
                     @endforeach
-
                 </div>
             @endif
         </div>
-
-        <div class="flex justify-between items-center gap-4 mt-8">
-
-            <a href="{{ route('student.courses.show', $content->course->slug) }}"
-                class="flex items-center px-6 py-3 bg-gray-200 text-[#193053] rounded-full font-semibold hover:bg-gray-300 transition">
-                < Daftar Isi
-            </a>
-
-            @php
-                $nextContent = $content->course->contents()
-                    ->where('order', '>', $content->order)
-                    ->orderBy('order', 'asc')
-                    ->first();
-            @endphp
-
-            @if ($previousCompleted && $nextContent)
-                <a href="{{ route('student.contents.show', [$content->course->slug, $nextContent->id]) }}"
-                    class="flex items-center px-6 py-3 bg-[#446AA6] text-white rounded-full font-bold hover:bg-[#264069] transition">
-                    Lanjut Materi >
-                </a>
-            @else
-                <button disabled class="px-6 py-3 bg-gray-400 text-white rounded-full font-bold cursor-not-allowed opacity-70">
-                    Lanjut Materi >
-                </button>
-            @endif
-
-        </div>
-
     </div>
 </x-app-layout>

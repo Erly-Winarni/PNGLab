@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Category;
 use App\Models\Content;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,6 @@ class StudentDashboardController extends Controller
 
         $coursesQuery = Course::with(['teacher', 'category'])
             ->where('is_active', 1); 
-
         
         if ($request->filled('search')) {
             $coursesQuery->where('title', 'like', "%{$request->search}%");
@@ -33,7 +33,7 @@ class StudentDashboardController extends Controller
             ->take(5)
             ->get();
 
-        $categories = \App\Models\Category::all();
+        $categories = Category::all();
 
         return view('student.dashboard', compact('user', 'courses', 'topCourses', 'categories'));
     }

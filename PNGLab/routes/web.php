@@ -10,8 +10,9 @@ use App\Http\Controllers\ContentController;
 use App\Http\Controllers\Student\ContentController as StudentContentController;
 use App\Http\Controllers\Teacher\ContentController as TeacherContentController;
 use App\Http\Controllers\Admin\ContentController as AdminContentController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\StudentDashboardController;
+use \App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Models\Course;
@@ -54,9 +55,9 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
         Route::resource('courses', AdminCourseController::class); 
-        Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-        Route::resource('contents', \App\Http\Controllers\Admin\ContentController::class);
+        Route::resource('users', UserController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('contents', AdminContentController::class);
 
         Route::get('/courses/{course:slug}', [AdminCourseController::class, 'show'])
             ->name('courses.show');
@@ -78,7 +79,7 @@ Route::middleware(['auth', 'role:teacher'])
 
         Route::resource('courses', TeacherCourseController::class);
 
-        Route::resource('contents', \App\Http\Controllers\Teacher\ContentController::class);
+        Route::resource('contents',TeacherContentController::class);
 
         Route::get('/contents/{content}/media', [TeacherContentController::class, 'manageMedia']
             )->name('contents.media.index');
@@ -93,7 +94,7 @@ Route::middleware(['auth', 'role:student'])
     ->name('student.')
     ->group(function () {
 
-        Route::get('/', [\App\Http\Controllers\Student\StudentDashboardController::class, 'index'])
+        Route::get('/', [StudentDashboardController::class, 'index'])
             ->name('dashboard');
 
         Route::get('/catalog', [StudentCourseController::class, 'catalog'])

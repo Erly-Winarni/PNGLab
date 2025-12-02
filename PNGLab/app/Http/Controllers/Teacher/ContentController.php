@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content;
+use App\Models\ContentMedia;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -149,7 +150,7 @@ class ContentController extends Controller
 
     public function deleteMedia($mediaId)
     {
-        $media = \App\Models\ContentMedia::findOrFail($mediaId);
+        $media = ContentMedia::findOrFail($mediaId);
 
         if ($media->type === 'pdf' && Storage::disk('public')->exists($media->value)) {
             Storage::disk('public')->delete($media->value);

@@ -144,17 +144,21 @@
                     <div class="grid grid-cols-1 gap-4">
                         
                         <a href="{{ route('teacher.courses.create') }}" 
-                            class="block py-4 rounded-xl text-center font-bold text-lg 
-                                    bg-[#4670A4] text-white 
-                                    hover:bg-[#264069] transition shadow-lg">
-                            Tambah Kelas
+                           class="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#48C264] transition duration-300 flex items-center shadow-md">
+                            <img src="{{ asset('images/icon-class-green.png') }}" alt="Ikon Kelas" class="h-7 w-7 object-contain mr-5">
+                            <div>
+                                <h3 class="font-bold text-lg text-[#193053]">Tambah Kelas</h3>
+                                <p class="text-sm text-gray-500">Buat, edit, atau hapus kelas.</p>
+                            </div>
                         </a>
 
                         <a href="{{ route('teacher.contents.create') }}" 
-                            class="block py-4 rounded-xl text-center font-bold text-lg 
-                                    bg-[#48C264] text-white 
-                                    hover:bg-green-700 transition shadow-lg">
-                            Tambah Materi
+                           class="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#446AA6] transition duration-300 flex items-center shadow-md">
+                            <img src="{{ asset('images/icon-book-blue.png') }}" alt="Ikon Buku" class="h-7 w-7 object-contain mr-5">
+                            <div>
+                                <h3 class="font-bold text-lg text-[#193053]">Tambah Materi</h3>
+                                <p class="text-sm text-gray-500">Buat, edit, atau hapus kelas.</p>
+                            </div>
                         </a>
                     </div>
                 </div>

@@ -31,7 +31,7 @@
                             <tr class="hover:bg-gray-50 transition border-t border-gray-100">
                                 <td class="px-6 py-4 text-sm text-gray-500 hidden sm:table-cell">{{ $loop->iteration }}</td>
                                 
-                                <td class="px-6 py-4 text-sm font-medium text-[#193053]">{{ $category->name }}</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-[#446AA6]">{{ $category->name }}</td>
                                
                                 <td class="px-6 py-4 text-center space-x-3 whitespace-nowrap">
                                     <a href="{{ route('admin.categories.edit', $category->id) }}" 

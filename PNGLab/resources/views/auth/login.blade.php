@@ -1,7 +1,5 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-        <img src="{{ asset('images/surat-depan.png') }}" class="absolute inset-0 w-full h-full top-2 object-contain pointer-events-none z-20">
-
+    <div class="min-h-screen flex items-center justify-center p-4 mb-8 relative overflow-hidden">
         <div class="relative z-10 w-full max-w-md bg-gradient-to-br from-[#446AA6] to-[#5ED68A] rounded-2xl shadow-xl px-6 pt-16 pb-44">
           
             <h1 class="text-3xl font-bold text-[#446AA6] bg-white px-6 py-1 inline-block absolute -top-6 left-1/2 transform -translate-x-1/2 -rotate-3 shadow-md">
@@ -21,7 +19,7 @@
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus class="mt-1 block w-full border border-gray-300 rounded-xl p-3 bg-white text-[#193053] focus:ring-[#264069] focus:border-[#264069] transition" />
                     
                     @error('email')
-                        <p class="text-red-300 text-sm mt-2">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -30,7 +28,7 @@
                     <input id="password" type="password" name="password" required autocomplete="current-password"  class="mt-1 block w-full border border-gray-300 rounded-xl p-3 bg-white text-[#193053] focus:ring-[#264069] focus:border-[#264069] transition" />
                     
                     @error('password')
-                        <p class="text-red-300 text-sm mt-2">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 

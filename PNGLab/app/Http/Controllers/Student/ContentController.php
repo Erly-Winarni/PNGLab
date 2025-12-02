@@ -20,41 +20,43 @@ class ContentController extends Controller
             ]
         ]);
 
-        $nextContent = $content->course
-            ->contents()
-            ->where('order', '>', $content->order)
-            ->orderBy('order')
-            ->first();
-
-        if ($nextContent) {
-            return redirect()
-                ->route('student.courses.show', $content->course->slug)
-                ->with('success', 'Konten selesai! Lanjut ke materi berikutnya.');
-        }
-
-        return back()->with('success', 'Konten selesai!');
+        return redirect()
+        ->route('student.contents.show', [
+            'course' => $course->slug,
+            'content' => $content->id
+        ])
+        ->with('success', 'Konten telah ditandai selesai.');
     }
 
     public function show(Course $course, Content $content)
     {
         $student = auth()->user();
 
-        $isCompleted = $content->is_completed;
-
-        $previous = Content::where('course_id', $content->course_id)
+        $requiredCount = Content::where('course_id', $content->course_id)
             ->where('order', '<', $content->order)
-            ->orderBy('order', 'desc')
-            ->first();
+            ->count();
 
-        $previousCompleted = $previous
-            ? $previous->completedBy()->where('user_id', $student->id)->exists()
-            : true;
+        $completedCount = $student->contentProgress()
+            ->where('is_done', true)
+            ->whereIn(
+                'content_id',
+                Content::where('course_id', $content->course_id)
+                    ->where('order', '<', $content->order)
+                    ->pluck('id')
+            )
+            ->count();
+
+        $previousCompleted = ($completedCount === $requiredCount);
+
+        $isCompleted = $student->contentProgress()
+            ->where('content_id', $content->id)
+            ->where('is_done', true)
+            ->exists();
 
         return view('student.contents.show', compact(
             'content',
             'isCompleted',
-            'previousCompleted',
-            'previous'
+            'previousCompleted'
         ));
     }
 

@@ -1,7 +1,5 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center p-4 pt-16 relative overflow-hidden">
-        <img src="{{ asset('images/surat-depan.png') }}" class="absolute inset-0 w-full h-full top-56 object-contain pointer-events-none z-20">
-
+    <div class="min-h-screen flex items-center justify-center p-4 pt-16 mb-8 relative overflow-hidden">
         <div class="relative z-10 w-full max-w-md bg-gradient-to-br from-[#446AA6] to-[#5ED68A] rounded-2xl shadow-xl px-6 pt-16 pb-36">
             <h1 class="text-3xl font-bold text-[#446AA6] bg-white px-6 py-1 inline-block absolute -top-6 left-1/2 transform -translate-x-1/2 -rotate-3 shadow-md">
                 Daftar

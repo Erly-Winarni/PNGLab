@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-4xl mx-auto py-10 px-4 bg-white rounded-lg shadow-xl mt-8"> {{-- Tambahkan styling container --}}
+    <div class="max-w-4xl mx-auto py-10 px-4 bg-white rounded-lg shadow-xl mt-8"> 
         <div class="mb-8 pb-4 border-b border-gray-200">
             <h1 class="text-4xl font-extrabold mb-2 text-[#193053]">{{ $course->title }}</h1>
             <p class="text-gray-600 mb-3">{{ $course->description }}</p>
@@ -26,7 +26,6 @@
                 @endphp
 
                 <div class="p-4 rounded-xl shadow-sm border {{ $bgColor }} {{ $borderColor }} flex justify-between items-center transition duration-300 hover:shadow-md">
-                    
                     <div class="flex items-center space-x-3">
                         <div class="text-xl {{ $isCompleted ? 'text-[#52A397]' : 'text-gray-400' }}">
                             @if($isCompleted)
@@ -52,7 +51,7 @@
                                 method="POST">
                                 @csrf
                                 <button type="submit" class="px-4 py-2 bg-[#F4A03E] text-white font-semibold rounded-full text-sm hover:bg-yellow-600 transition shadow-md">
-                                    Selesai
+                                    Selesai (Tandai Batal)
                                 </button>
                             </form>
                         @else

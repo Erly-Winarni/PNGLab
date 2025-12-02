@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="max-w-3xl mx-auto py-10 px-4"> {{-- Tambahkan py-10 dan px-4 --}}
-        <h1 class="text-3xl font-extrabold text-[#193053] mb-8">Ubah Password</h1> {{-- Ubah styling judul --}}
+    <div class="max-w-3xl mx-auto py-10 px-4"> 
+        <h1 class="text-3xl font-extrabold text-[#193053] mb-8">Ubah Password</h1> 
 
         <form action="{{ route('profile.password.update') }}" method="POST"
-            class="bg-white p-6 rounded-2xl shadow-xl border border-gray-200"> {{-- Card styling --}}
+            class="bg-white p-6 rounded-2xl shadow-xl border border-gray-200"> 
             @csrf
             @method('PATCH')
 

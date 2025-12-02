@@ -20,10 +20,7 @@
                     </main>
 
                 </div>
-                
-                <div class="md:hidden">
-                    {{-- @include('components.navigation-bottom')  --}}
-                </div>
             </div>
+            @include('components.footer')
         </body>
 </html>

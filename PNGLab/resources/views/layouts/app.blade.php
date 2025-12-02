@@ -13,7 +13,7 @@
         <body class="font-Poppins antialiased bg-[#EAF1FF]">
             <div class="flex min-h-screen"> 
             
-                <div class="hidden md:flex flex-shrink-0">
+                <div class="flex flex-shrink-0">
                     @include('components.navigation-desktop') 
                 </div>
 
@@ -24,10 +24,7 @@
                     </main>
 
                 </div>
-                
-                <div class="md:hidden">
-                    @include('components.navigation-bottom') 
-                </div>
             </div>
+            @include('components.footer')
         </body>
 </html>

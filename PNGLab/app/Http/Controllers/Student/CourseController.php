@@ -78,13 +78,4 @@ class CourseController extends Controller
         return view('student.courses.show', compact('course', 'contents'));
     }
 
-    public function complete(Content $content)
-    {
-        $user = auth()->user();
-
-        $content->completedBy()->syncWithoutDetaching([$user->id]);
-
-        return back()->with('success', 'Materi ditandai selesai!');
-    }
-
 }

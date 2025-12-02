@@ -8,7 +8,7 @@
         <h1 class="max-w-7xl mx-auto px-4 text-3xl ml-4 font-extrabold text-[#193053] mb-8">
             Profile Pengguna
         </h1>
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-28 md:space-x-12">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 gap-6 mt-28 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-12">
             <div class="md:col-span-1 lg:col-span-1 max-w-sm mx-auto w-full"> 
                 <div class="relative w-[410px] p-12 mb-8 min-h-[500px]">
                     <img src="{{ asset('images/gantungan.png') }}" alt="Hiasan Gantungan ID Card" class="absolute top-12 left-[214px] transform -translate-x-1/2 -translate-y-full w-36 h-auto z-10">

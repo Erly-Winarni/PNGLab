@@ -23,8 +23,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        
         $user = auth()->user();
+
+        if (!$user->is_active) {
+            Auth::logout();
+            return back()->withErrors([
+                'email' => 'Akun Anda telah dinonaktifkan.',
+            ]);
+        }
 
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
