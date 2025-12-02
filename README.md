@@ -86,3 +86,34 @@ http://127.0.0.1:8000
 #### 1.Gunakan akun yang dibuat melalui seeder atau register di halaman login
 #### 2.Admin dapat langsung login untuk mengelola pengguna, course/kelas, kategori dan konten
 
+## Dashboard
+![Dashboard](docs/screenshots/guest-page.png)
+_Tampilan dashboard guest_
+
+## Halaman Login
+![Login Page](docs/screenshots/login-page.png)
+_Form login untuk user_
+
+## Dashboard Student
+![Dashboard Page](docs/screenshots/student-dash.png)
+_Tampilan Dashboard Student_
+
+## Dashboard Teacher
+![Dashboard Page](docs/screenshots/teacher-dash.png)
+_Tampilan Dashboard Teacher_
+
+## Dashboard Admin
+![Dashboard Page](docs/screenshots/admin-dash.png)
+_Tampilan Dashboard Admin_
+
+## Halaman Profile
+![Profile Page](docs/screenshots/admin-profile.png)
+_Tampilan Profile_
+
+## Halaman Kelas
+![Course Page](docs/screenshots/student-course.png)
+_Tampilan Kelas (POV Siswa)_
+
+## Halaman Tambah Kelas
+![Add Course Page](docs/screenshots/add-course.png)
+_Tampilan Form Tambah Kelas_
