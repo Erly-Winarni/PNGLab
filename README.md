@@ -1,4 +1,9 @@
-#  🎨 PNGLab
+<p align="center">
+  <img src="docs/screenshots/Logo-PNGLab.png" alt="Logo" width="250"/>
+  <br/>
+</p>
+
+# 🎨 PNGLab
 PNGLab adalah platform kursus  yang berfokus pada pelatihan mendalam di bidang **Desain Grafis ataupun Editing**. PNGLab dirancang untuk menjembatani Guru profesional dengan Siswa yang haus akan keterampilan visual.
 
 ### Peran Pengguna & Akses
