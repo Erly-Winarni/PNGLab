@@ -23,11 +23,11 @@
     <hr class="border-gray-200">
 
     <div class="mb-4">
-        <label class="block text-sm font-semibold text-[#193053] mb-2">Media URL (YouTube)</label>
+        <label class="block text-sm font-semibold text-[#193053] mb-2">Media URL (YouTube, PDF)</label>
         
         <div id="url-wrapper" class="flex flex-col space-y-2"> 
             <div class="flex items-center space-x-2 w-full">
-                <input type="text" name="media_urls[]" placeholder="https://..." class="border border-gray-300 p-3 w-full rounded-xl bg-gray-50 focus:ring-[#446AA6] focus:border-[#446AA6]">
+                <input type="text" name="media_urls[]" placeholder="Contoh: https://www.youtube.com/watch?v=..." class="border border-gray-300 p-3 w-full rounded-xl bg-gray-50 focus:ring-[#446AA6] focus:border-[#446AA6]">
             </div>
             
         </div>
@@ -41,7 +41,7 @@
     <hr class="border-gray-200">
 
     <div class="mb-4 pt-4">
-        <label for="media_files" class="block text-sm font-semibold text-[#193053] mb-2">Upload File PDF (Maks. 5 file)</label>
+        <label for="media_files" class="block text-sm font-semibold text-[#193053] mb-2">Upload File PDF</label>
         <input type="file" id="media_files" name="media_files[]" multiple
                class="w-full text-sm text-gray-500 
                       file:mr-4 file:py-2 file:px-4 
@@ -68,7 +68,7 @@
         </div>
 
         <div>
-            <label for="course_id" class="block text-sm font-semibold text-[#193053] mb-2">Pilih Course</label>
+            <label for="course_id" class="block text-sm font-semibold text-[#193053] mb-2">Pilih Kelas</label>
             <select id="course_id" name="course_id" 
                     class="bg-gray-50 text-[#193053] border border-gray-300 rounded-xl p-3 w-full 
                            focus:ring-[#446AA6] focus:border-[#446AA6] transition">

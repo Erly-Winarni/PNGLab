@@ -44,11 +44,12 @@
 
     <div>
         <label for="role" class="block text-sm font-semibold text-[#193053] mb-2">Role</label>
-        <select id="role" name="role" 
-                class="w-full bg-gray-50 text-[#193053] border border-gray-300 rounded-xl p-3 focus:ring-[#446AA6] focus:border-[#446AA6] transition">
+        <select id="role" name="role" class="w-full bg-gray-50 text-[#193053] border border-gray-300 rounded-xl p-3 focus:ring-[#446AA6] focus:border-[#446AA6] transition">
             <option value="student" {{ (old('role', $user->role ?? '') == 'student') ? 'selected' : '' }}>Student</option>
             <option value="teacher" {{ (old('role', $user->role ?? '') == 'teacher') ? 'selected' : '' }}>Teacher</option>
+            <option value="admin" {{ (old('role', $user->role ?? '') == 'admin') ? 'selected' : '' }}>Admin</option>
         </select>
+
         @error('role')
             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
         @enderror

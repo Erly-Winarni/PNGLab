@@ -1,6 +1,6 @@
 <div class="bg-white p-6 rounded-2xl shadow-xl space-y-6 border border-gray-100 text-[#193053]">
     <div>
-        <label for="title" class="block text-sm font-semibold text-[#193053] mb-2">Judul Course</label>
+        <label for="title" class="block text-sm font-semibold text-[#193053] mb-2">Judul Kelas</label>
         <input type="text" id="title" name="title" 
               class="bg-gray-50 text-[#193053] border border-gray-300 rounded-xl p-3 w-full 
                      focus:ring-[#446AA6] focus:border-[#446AA6] transition shadow-inner"
