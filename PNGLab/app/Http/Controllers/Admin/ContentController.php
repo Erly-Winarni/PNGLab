@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content;
+use App\Models\ContentMedia;
 use App\Models\Course;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,6 +34,17 @@ class ContentController extends Controller
             'media_urls.*' => 'nullable|string',
             'media_files.*' => 'nullable|file|mimes:pdf',
             'order' => 'nullable|integer|min:0',
+        ], [
+            'title.required'       => 'Judul wajib diisi.',
+            'title.string'         => 'Judul harus berupa teks.',
+            'body.string'          => 'Konten harus berupa teks.',
+            'course_id.required'   => 'Kursus wajib dipilih.',
+            'course_id.exists'     => 'Kursus tidak valid.',
+            'media_urls.*.string'  => 'URL media harus berupa teks.',
+            'media_files.*.file'   => 'File media harus berupa file.',
+            'media_files.*.mimes'  => 'File media harus berupa PDF.',
+            'order.integer'        => 'Urutan harus berupa angka.',
+            'order.min'            => 'Urutan minimal 0.',
         ]);
 
         $course = Course::findOrFail($request->course_id);
@@ -43,12 +55,18 @@ class ContentController extends Controller
             ])->withInput();
         }
 
+        $order = $request->order ?? 0;
+
+        Content::where('course_id', $request->course_id)
+            ->where('order', '>=', $order)
+            ->increment('order');
+
         $content = Content::create([
             'title'      => $request->title,
             'body'       => $request->body,
             'course_id'  => $request->course_id,
             'teacher_id' => $course->teacher_id, 
-            'order'      => $request->order ?? 0,
+            'order'      => $order,
         ]);
 
         if ($request->media_urls) {
@@ -99,11 +117,17 @@ class ContentController extends Controller
             'order' => 'nullable|integer|min:0',
         ]);
 
+         if ($request->filled('order')) {
+            $finalOrder = $request->order;
+        } else {
+            $finalOrder = Content::where('course_id', $request->course_id)->max('order') + 1;
+        }
+
         $updateData = [
             'title'      => $request->title,
             'body'       => $request->body,
             'course_id'  => $request->course_id,
-            'order'      => $request->order ?? 0,
+            'order'      => $finalOrder,
         ];
 
         if ($content->course_id != $request->course_id) {
@@ -141,7 +165,7 @@ class ContentController extends Controller
 
     public function deleteMedia($mediaId)
     {
-        $media = \App\Models\ContentMedia::findOrFail($mediaId);
+        $media = ContentMedia::findOrFail($mediaId);
 
         if ($media->type === 'pdf') {
             if (\Storage::exists($media->value)) {

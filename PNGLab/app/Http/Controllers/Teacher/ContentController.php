@@ -45,12 +45,18 @@ class ContentController extends Controller
             'order.min'            => 'Urutan minimal 0.',
         ]);
 
+        $order = $request->order ?? 0;
+
+        Content::where('course_id', $request->course_id)
+            ->where('order', '>=', $order)
+            ->increment('order');
+
         $content = Content::create([
             'title' => $request->title,
             'body' => $request->body,
             'course_id' => $request->course_id,
             'teacher_id' => auth()->id(),
-            'order' => $request->order ?? 0,
+            'order' => $order,
         ]);
 
         if ($request->media_urls) {
@@ -110,11 +116,17 @@ class ContentController extends Controller
             'order.min'            => 'Urutan minimal 0.',
         ]);
 
+        if ($request->filled('order')) {
+            $finalOrder = $request->order;
+        } else {
+            $finalOrder = Content::where('course_id', $request->course_id)->max('order') + 1;
+        }
+
         $content->update([
             'title' => $request->title,
             'body' => $request->body,
             'course_id' => $request->course_id,
-            'order' => $request->order ?? 0,
+            'order' => $finalOrder,
         ]);
 
         if ($request->media_urls) {

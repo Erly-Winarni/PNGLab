@@ -42,6 +42,7 @@ class CourseController extends Controller
             'category_id.exists'    => 'Kategori tidak valid.',
         ]);
 
+
         Course::create([
             'title'       => $request->title,
             'slug'        => Str::slug($request->title),
@@ -134,7 +135,7 @@ class CourseController extends Controller
 
         $course->delete();
 
-        return redirect()->route('teacher.course.index')
+        return redirect()->route('teacher.courses.index')
             ->with('success', 'Course berhasil dihapus.');
     }
 }

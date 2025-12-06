@@ -33,7 +33,14 @@ class NewPasswordController extends Controller
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required',
+                'confirmed',
+                'min:8',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+            ],
         ]);
 
         $status = Password::reset(
@@ -53,4 +60,5 @@ class NewPasswordController extends Controller
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
     }
+
 }

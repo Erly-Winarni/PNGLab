@@ -68,21 +68,6 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    public function redirectTo(): string
-    {
-        $user = auth()->user();
-
-        if ($user->role === 'admin') {
-            return route('admin.dashboard');
-        }
-
-        if ($user->role === 'teacher') {
-            return route('teacher.dashboard');
-        }
-
-        return route('student.dashboard');
-    }
-
     public function throttleKey(): string
     {
         return strtolower($this->input('email')).'|'.$this->ip();

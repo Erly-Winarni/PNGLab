@@ -57,7 +57,7 @@
 
                                     <button
                                         type="button"
-                                        @click="showModal = true; formAction = '{{ route('admin.courses.destroy', $course->slug) }}';"
+                                        @click="showModal = true; formAction = '{{ route('admin.courses.destroy', $course->id) }}';"
                                         class="text-sm font-md text-red-600 hover:text-red-800 transition duration-150 font-medium">
                                         Hapus
                                     </button>

@@ -4,32 +4,6 @@
             <h1 class="text-3xl font-extrabold mt-2 text-[#193053]">{{ $content->title }}</h1>
         </div>
 
-        <div class="flex justify-between items-center gap-4 mt-8">
-            <a href="{{ route('student.courses.show', $content->course->slug) }}"
-                class="flex items-center px-6 py-3 bg-gray-200 text-[#193053] rounded-full font-semibold hover:bg-gray-300 transition">
-                < Daftar Isi
-            </a>
-
-            @php
-                $nextContent = $content->course->contents()
-                    ->where('order', '>', $content->order)
-                    ->orderBy('order', 'asc')
-                    ->first();
-            @endphp
-
-            @if ($previousCompleted && $nextContent)
-                <a href="{{ route('student.contents.show', [$content->course->slug, $nextContent->id]) }}"
-                    class="flex items-center px-6 py-3 bg-[#446AA6] text-white rounded-full font-bold hover:bg-[#264069] transition">
-                    Lanjut Materi >
-                </a>
-            @else
-                <button disabled class="px-6 py-3 bg-gray-400 text-white rounded-full font-bold cursor-not-allowed opacity-70">
-                    Lanjut Materi >
-                </button>
-            @endif
-
-        </div>
-
         <div class="mt-6">
             @php
                 $isCompleted = auth()->user()
@@ -119,6 +93,32 @@
                     @endforeach
                 </div>
             @endif
+        </div>
+        
+        <div class="flex justify-between items-center gap-4 mt-8">
+            <a href="{{ route('student.courses.show', $content->course->slug) }}"
+                class="flex items-center px-6 py-3 bg-gray-200 text-[#193053] rounded-full font-semibold hover:bg-gray-300 transition">
+                < Daftar Isi
+            </a>
+
+            @php
+                $nextContent = $content->course->contents()
+                    ->where('order', '>', $content->order)
+                    ->orderBy('order', 'asc')
+                    ->first();
+            @endphp
+
+            @if ($previousCompleted && $nextContent)
+                <a href="{{ route('student.contents.show', [$content->course->slug, $nextContent->id]) }}"
+                    class="flex items-center px-6 py-3 bg-[#446AA6] text-white rounded-full font-bold hover:bg-[#264069] transition">
+                    Lanjut Materi >
+                </a>
+            @else
+                <button disabled class="px-6 py-3 bg-gray-400 text-white rounded-full font-bold cursor-not-allowed opacity-70">
+                    Lanjut Materi >
+                </button>
+            @endif
+
         </div>
     </div>
 </x-app-layout>

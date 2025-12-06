@@ -138,14 +138,28 @@
                                         @endif
 
                                         <div class="flex gap-2 justify-between items-center">
-                                            
+                                            @php
+                                                $isFull = $course->max_students && $course->students()->count() >= $course->max_students;
+                                            @endphp
+
                                             @if(!$isFollowed)
-                                                <form action="{{ route('student.courses.follow', $course->id) }}" method="POST">
-                                                    @csrf
-                                                    <button class="bg-[#4670A4] text-white px-4 py-2 rounded-2xl text-sm font-semibold hover:bg-[#264069] transition">
-                                                        Ikuti Kelas
+                                                @if($isFull)
+                                                    <div class="text-red-600 text-xs font-semibold mb-2">
+                                                        Kelas ini sudah penuh
+                                                    </div>
+
+                                                    <button class="bg-gray-400 text-white px-4 py-2 rounded-2xl text-sm font-semibold cursor-not-allowed"
+                                                            disabled>
+                                                        Kelas Penuh
                                                     </button>
-                                                </form>
+                                                @else
+                                                    <form action="{{ route('student.courses.follow', $course->id) }}" method="POST">
+                                                        @csrf
+                                                        <button class="bg-[#4670A4] text-white px-4 py-2 rounded-2xl text-sm font-semibold hover:bg-[#264069] transition">
+                                                            Ikuti Kelas
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             @else
                                                 <a href="{{ route('student.courses.show', $course->slug) }}"
                                                    class="bg-[#4670A4] text-white px-4 py-2 rounded-2xl text-sm font-semibold hover:bg-[#264069] transition">
@@ -169,7 +183,7 @@
 
             </div>
 
-            <aside class="w-full md:w-80 flex-shrink-0 p-6 mt-5 mr-5 mx-auto bg-white shadow-lg overflow-y-auto rounded-t-3xl">
+            <aside class="w-full md:w-80 flex-shrink-0 p-6 mt-5 mb-10 mr-5 mx-auto bg-white shadow-lg overflow-y-auto rounded-3xl">
                 <h3 class="font-bold text-xl mb-6 text-[#193053]">Kelas yang Diikuti:</h3>
                 
                 <div class="space-y-4">

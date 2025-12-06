@@ -14,7 +14,14 @@ class PasswordController extends Controller
     {
         $validated = $request->validateWithBag('updatePassword', [
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
+            'password' => [
+                'required',
+                'confirmed',
+                'min:8',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+            ],
         ]);
 
         $request->user()->update([
@@ -23,4 +30,5 @@ class PasswordController extends Controller
 
         return back()->with('status', 'password-updated');
     }
+
 }

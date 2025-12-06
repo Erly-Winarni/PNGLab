@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\Content;
 use App\Models\Category;
 use App\Models\Course;
-use App\Models\CourseUser;
 
 
 class User extends Authenticatable {

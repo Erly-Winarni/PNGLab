@@ -52,6 +52,16 @@ class CourseController extends Controller
     {
         $user = auth()->user();
 
+        $currentCount = $course->students()->count(); 
+
+        if ($course->max_students !== null && $currentCount >= $course->max_students) {
+            return back()->with('error', 'Kelas ini sudah penuh dan tidak dapat diikuti.');
+        }
+
+        if ($user->courses()->where('course_id', $course->id)->exists()) {
+            return back()->with('info', 'Kamu sudah mengikuti course ini.');
+        }
+
         $user->courses()->syncWithoutDetaching([$course->id]);
 
         return back()->with('success', 'Berhasil mengikuti course!');
