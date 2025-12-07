@@ -37,12 +37,10 @@ class ContentController extends Controller
             ->count();
 
         $completedCount = $student->contentProgress()
-            ->where('is_done', true)
-            ->whereIn(
-                'content_id',
-                Content::where('course_id', $content->course_id)
-                    ->where('order', '<', $content->order)
-                    ->pluck('id')
+            ->wherePivot('is_done', true)
+            ->wherePivotIn('content_id', Content::where('course_id', $content->course_id)
+                ->where('order', '<', $content->order)
+                ->pluck('id')
             )
             ->count();
 
