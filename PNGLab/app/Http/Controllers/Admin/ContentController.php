@@ -8,6 +8,7 @@ use App\Models\ContentMedia;
 use App\Models\Course;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContentController extends Controller
 {
@@ -55,7 +56,9 @@ class ContentController extends Controller
             ])->withInput();
         }
 
-        $order = $request->order ?? 0;
+        DB::transaction(function () use ($request, $course) {
+
+        $order = $request->order ?? (Content::where('course_id', $request->course_id)->max('order') + 1);
 
         Content::where('course_id', $request->course_id)
             ->where('order', '>=', $order)
@@ -65,7 +68,7 @@ class ContentController extends Controller
             'title'      => $request->title,
             'body'       => $request->body,
             'course_id'  => $request->course_id,
-            'teacher_id' => $course->teacher_id, 
+            'teacher_id' => $course->teacher_id,
             'order'      => $order,
         ]);
 
@@ -83,13 +86,14 @@ class ContentController extends Controller
         if ($request->hasFile('media_files')) {
             foreach ($request->media_files as $file) {
                 $path = $file->store('media', 'public');
-
                 $content->media()->create([
                     'type'  => 'pdf',
                     'value' => $path,
                 ]);
             }
         }
+
+    });
 
         return redirect()->route('admin.contents.index')
             ->with('success','Materi berhasil dibuat.');
@@ -117,20 +121,30 @@ class ContentController extends Controller
             'order' => 'nullable|integer|min:0',
         ]);
 
-         if ($request->filled('order')) {
-            $finalOrder = $request->order;
-        } else {
-            $finalOrder = Content::where('course_id', $request->course_id)->max('order') + 1;
+        DB::transaction(function () use ($request, $content, $course) {
+
+        $newCourseId = $request->course_id;
+        $newOrder = $request->order ?? (Content::where('course_id', $newCourseId)->max('order') + 1);
+
+        if ($content->course_id != $newCourseId) {
+            Content::where('course_id', $content->course_id)
+                ->where('order', '>', $content->order)
+                ->decrement('order');
         }
+
+        Content::where('course_id', $newCourseId)
+            ->where('id', '!=', $content->id)
+            ->where('order', '>=', $newOrder)
+            ->increment('order');
 
         $updateData = [
             'title'      => $request->title,
             'body'       => $request->body,
-            'course_id'  => $request->course_id,
-            'order'      => $finalOrder,
+            'course_id'  => $newCourseId,
+            'order'      => $newOrder,
         ];
 
-        if ($content->course_id != $request->course_id) {
+        if ($content->course_id != $newCourseId) {
             $updateData['teacher_id'] = $course->teacher_id;
         }
 
@@ -150,13 +164,14 @@ class ContentController extends Controller
         if ($request->hasFile('media_files')) {
             foreach ($request->media_files as $file) {
                 $path = $file->store('media', 'public');
-
                 $content->media()->create([
                     'type'  => 'pdf',
                     'value' => $path,
                 ]);
             }
         }
+
+    });
 
         return redirect()->route('admin.contents.index')
                  ->with('success','Materi berhasil diperbarui.');

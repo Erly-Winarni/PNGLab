@@ -8,6 +8,8 @@ use App\Models\ContentMedia;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
 
 class ContentController extends Controller
 {
@@ -45,7 +47,8 @@ class ContentController extends Controller
             'order.min'            => 'Urutan minimal 0.',
         ]);
 
-        $order = $request->order ?? 0;
+        DB::transaction(function () use ($request) {
+        $order = $request->order ?? (Content::where('course_id', $request->course_id)->max('order') + 1);
 
         Content::where('course_id', $request->course_id)
             ->where('order', '>=', $order)
@@ -79,6 +82,8 @@ class ContentController extends Controller
                 ]);
             }
         }
+
+    });
 
         return redirect()->route('teacher.contents.index')
                          ->with('success', 'Materi berhasil dibuat.');
@@ -116,17 +121,27 @@ class ContentController extends Controller
             'order.min'            => 'Urutan minimal 0.',
         ]);
 
-        if ($request->filled('order')) {
-            $finalOrder = $request->order;
-        } else {
-            $finalOrder = Content::where('course_id', $request->course_id)->max('order') + 1;
+        DB::transaction(function () use ($request, $content) {
+
+        $newCourseId = $request->course_id;
+        $newOrder = $request->order ?? (Content::where('course_id', $newCourseId)->max('order') + 1);
+
+        if ($content->course_id != $newCourseId) {
+            Content::where('course_id', $content->course_id)
+                ->where('order', '>', $content->order)
+                ->decrement('order');
         }
+
+        Content::where('course_id', $newCourseId)
+            ->where('id', '!=', $content->id)
+            ->where('order', '>=', $newOrder)
+            ->increment('order');
 
         $content->update([
             'title' => $request->title,
             'body' => $request->body,
-            'course_id' => $request->course_id,
-            'order' => $finalOrder,
+            'course_id' => $newCourseId,
+            'order' => $newOrder,
         ]);
 
         if ($request->media_urls) {
@@ -149,6 +164,8 @@ class ContentController extends Controller
                 ]);
             }
         }
+
+    });
 
         return redirect()->route('teacher.contents.index')
                          ->with('success', 'Materi berhasil diperbarui.');

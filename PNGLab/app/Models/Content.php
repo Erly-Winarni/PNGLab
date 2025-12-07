@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Content extends Model {
     protected $fillable = [
-    'course_id','title','body','media_url','media_type','media_path','order','teacher_id'];
+    'course_id','title','body','order','teacher_id'];
 
     public function course() {
         return $this->belongsTo(Course::class);
