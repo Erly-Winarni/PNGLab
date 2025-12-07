@@ -99,10 +99,10 @@
                 <hr class="border-[#193053]">
 
                 <div class="-pt-2">
-                    <h3 class="font-bold text-2xl mb-6 text-[#193053]">Semua Kelas</h3>
+                    <h3 class="font-bold text-2xl mb-6 text-[#193053]">Kelas Populer</h3>
                     
                     @if($topCourses->isEmpty())
-                        <p class="text-[#193053]">Tidak ada course yang tersedia saat ini.</p>
+                        <p class="text-[#193053]">Tidak ada kelas yang tersedia saat ini.</p>
                     @else
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach($topCourses as $course)
