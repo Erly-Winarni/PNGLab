@@ -52,7 +52,7 @@
                                     <a href="{{ route('admin.courses.show', $course->slug) }}"
                                        class="text-sm font-md text-[#446AA6] hover:text-[#264069] transition duration-150 font-medium">Detail</a>
 
-                                    <a href="{{ route('admin.courses.edit', $course->slug) }}"
+                                    <a href="{{ route('admin.courses.edit', $course->id) }}"
                                        class="text-sm font-md text-yellow-600 hover:text-yellow-800 transition duration-150 font-medium">Edit</a>
 
                                     <button

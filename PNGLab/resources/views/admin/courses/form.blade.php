@@ -23,7 +23,11 @@
             <label for="category_id" class="block text-sm font-semibold text-[#193053] mb-2">Kategori</label>
             <select id="category_id" name="category_id" 
                     class="bg-gray-50 text-[#193053] border border-gray-300 rounded-xl p-3 w-full focus:ring-[#446AA6] focus:border-[#446AA6] transition">
-                <option value="">-- Pilih Kategori --</option>
+                
+                <option value="" {{ old('category_id', $course->category_id ?? '') == '' ? 'selected' : '' }}>
+                    -- Pilih Kategori --
+                </option>
+
                 @foreach ($categories as $c)
                     <option value="{{ $c->id }}"
                         {{ old('category_id', $course->category_id ?? '') == $c->id ? 'selected' : '' }}>
@@ -31,6 +35,7 @@
                     </option>
                 @endforeach
             </select>
+
             @error('category_id')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror

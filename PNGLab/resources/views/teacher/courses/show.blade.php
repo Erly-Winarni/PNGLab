@@ -22,7 +22,7 @@
                     
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm">
                         <p class="text-sm font-medium text-gray-500">Kategori</p>
-                        <p class="mt-1 text-lg font-bold text-[#446AA6]">{{ $course->category->name }}</p>
+                        <p class="mt-1 text-lg font-bold text-[#446AA6]">{{ $course->category?->name ?? '-' }}</p>
                     </div>
                     
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm">

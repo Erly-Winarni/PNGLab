@@ -42,7 +42,7 @@
                 <ul class="space-y-2 text-sm text-gray-600">
                     <li><strong class="text-[#193053]">Email:</strong> info@pnglab.com</li>
                     <li><strong class="text-[#193053]">Alamat:</strong> Makasssar, Sulawesi Selatan</li>
-                    <li><strong class="text-[#193053]">Jam Kerja:</strong> Sen-Jum, 09:00 - 17:00 whitespace-nowrap</li>
+                    <li><strong class="text-[#193053]">Jam Kerja:</strong> Sen-Jum, 09:00 - 17:00</li>
                 </ul>
             </div>
 
