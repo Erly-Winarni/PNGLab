@@ -154,7 +154,7 @@
                                         </a>
                                     @endif
 
-                                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $course->teacher->email }}&su=Pertanyaan tentang Course: {{ urlencode($course->title) }}"
+                                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $course->teacher->email }}&su=Pertanyaan tentang Kelas: {{ urlencode($course->title) }}"
                                         target="_blank"
                                         class="bg-[#48C264] text-white px-4 py-2 rounded-2xl text-sm font-semibold hover:bg-green-700 transition">
                                         Hubungi Guru

@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             @empty
-                                <p class="text-gray-700">Belum mengikuti kursus apapun.</p>
+                                <p class="text-gray-700">Belum mengikuti kelas apapun.</p>
                             @endforelse
                         </div>
                         @if ($courses->hasPages())
@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                             @empty
-                                <p class="text-gray-700">Belum membuat kursus apapun.</p>
+                                <p class="text-gray-700">Belum membuat kelas apapun.</p>
                             @endforelse
                         </div>
                         @if ($courses->hasPages())

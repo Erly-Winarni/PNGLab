@@ -101,7 +101,7 @@
                 <div class="-pt-2">
                     <h3 class="font-bold text-2xl mb-6 text-[#193053]">Semua Kelas</h3>
                     
-                    @if($courses->isEmpty())
+                    @if($topCourses->isEmpty())
                         <p class="text-[#193053]">Tidak ada course yang tersedia saat ini.</p>
                     @else
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -167,7 +167,7 @@
                                                 </a>
                                             @endif
 
-                                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $course->teacher->email }}&su=Pertanyaan tentang Course: {{ urlencode($course->title) }}"
+                                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $course->teacher->email }}&su=Pertanyaan tentang Kelas: {{ urlencode($course->title) }}"
                                                 target="_blank"
                                                 class="bg-[#48C264] text-white px-4 py-2 rounded-2xl text-sm font-semibold hover:bg-green-700 transition">
                                                 Hubungi Guru

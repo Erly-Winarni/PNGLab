@@ -14,7 +14,8 @@ class CourseController extends Controller
     {
         $user = auth()->user();
 
-        $coursesQuery = Course::with(['teacher', 'contents', 'category']);
+        $coursesQuery = Course::with(['teacher', 'contents', 'category'])
+            ->where('is_active', 1); 
 
         if ($request->filled('search')) {
             $coursesQuery->where('title', 'like', '%' . $request->search . '%');
@@ -59,7 +60,7 @@ class CourseController extends Controller
         }
 
         if ($user->courses()->where('course_id', $course->id)->exists()) {
-            return back()->with('info', 'Kamu sudah mengikuti course ini.');
+            return back()->with('info', 'Kamu sudah mengikuti kelas ini.');
         }
 
         $user->courses()->syncWithoutDetaching([$course->id]);

@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
             'password.required'     => 'Password wajib diisi.',
             'password.confirmed'    => 'Konfirmasi password tidak cocok.',
             'password.min'          => 'Password minimal 8 karakter.',
-            'password.regex'        => 'Password harus mengandung huruf besar, huruf kecil, angka, dan simbol.',
+            'password.regex'        => 'Password harus mengandung huruf besar, huruf kecil, dan angka.',
 
             'role.required'         => 'Role wajib dipilih.',
             'role.in'               => 'Role tidak valid.',

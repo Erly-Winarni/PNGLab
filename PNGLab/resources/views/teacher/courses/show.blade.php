@@ -47,7 +47,7 @@
                     </h3>
 
                     @if ($course->students->count() === 0)
-                        <p class="text-gray-500">Belum ada student yang mendaftar.</p>
+                        <p class="text-gray-500">Belum ada siswa yang mendaftar.</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-[#193053] whitespace-nowrap">
@@ -86,7 +86,7 @@
                 <div class="mt-8 pt-4 border-t border-gray-200 flex justify-end">
                     <a href="{{ route('teacher.courses.edit', $course->id) }}"
                        class="bg-[#F4A03E] text-white px-5 py-2 rounded-full font-semibold hover:bg-yellow-600 transition shadow-md">
-                        Edit Course
+                        Edit Kelas
                     </a>
                 </div>
 

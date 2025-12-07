@@ -71,7 +71,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-8 text-center text-gray-500 text-lg">
-                                    Anda belum membuat course apapun.
+                                    Anda belum membuat kelas apapun.
                                 </td>
                             </tr>
                         @endforelse

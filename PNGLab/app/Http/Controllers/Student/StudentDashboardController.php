@@ -13,28 +13,31 @@ class StudentDashboardController extends Controller
     {
         $user = auth()->user();
 
-        $coursesQuery = Course::with(['teacher', 'category'])
-            ->where('is_active', 1); 
-        
-        if ($request->filled('search')) {
-            $coursesQuery->where('title', 'like', "%{$request->search}%");
-        }
-
-        
-        if ($request->filled('category')) {
-            $coursesQuery->where('category_id', $request->category);
-        }
-
-        $courses = $coursesQuery->get();
-
-       $topCourses = Course::withCount('students')
-            ->where('is_active', 1)
-            ->orderBy('students_count', 'desc')
-            ->take(5)
-            ->get();
-
         $categories = Category::all();
 
-        return view('student.dashboard', compact('user', 'courses', 'topCourses', 'categories'));
+        $coursesQuery = Course::with(['teacher', 'category'])
+            ->where('is_active', 1);
+
+        if ($request->filled('search') || $request->filled('category')) {
+            if ($request->filled('search')) {
+                $coursesQuery->where('title', 'like', "%{$request->search}%");
+            }
+
+            if ($request->filled('category')) {
+                $coursesQuery->where('category_id', $request->category);
+            }
+
+            $topCourses = $coursesQuery->withCount('students')
+                ->orderBy('students_count', 'desc') 
+                ->get();
+        } else {
+           
+            $topCourses = $coursesQuery->withCount('students')
+                ->orderBy('students_count', 'desc')
+                ->take(5)
+                ->get();
+        }
+
+        return view('student.dashboard', compact('user', 'topCourses', 'categories'));
     }
 }
